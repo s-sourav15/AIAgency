@@ -1,0 +1,328 @@
+{
+  "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+  "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+  "total_pieces": 8,
+  "days": [
+    {
+      "day_number": 1,
+      "theme": "Real Conversations Start Here",
+      "pieces": [
+        {
+          "id": "62d772ef-9d93-45c3-8acb-d41359e266c1",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 1,
+          "platform": "linkedin",
+          "format": "caption",
+          "copy": "We've built PlutoApp on one basic principle: real connections come from shared values and passions. That's why our app asks the tough questions - what gets you fired up, and how do you handle disagreements? No shallow conversations here. If you're looking for people who care about substance over profile pics, welcome.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/UX1axYmZjRokMlGcB94f4hChfRIHylGgC4D7gnvpoSyjbFJWA/tmpyxh50x2u.webp"
+          ],
+          "hashtags": [
+            "PlutoApp",
+            "RealConnections",
+            "India"
+          ],
+          "validation_score": 0.73,
+          "validation_details": {
+            "feedback": {
+              "cta_present": "The call-to-action is clear, but consider rephrasing 'welcome' to 'join our community' to make it more specific and inviting.",
+              "originality": "The post feels fresh, but the phrase 'what gets you fired up' is a common trope. Consider rephrasing to 'what drives your passion' to make it more unique.",
+              "ai_detection_risk": "The post uses some generic phrases, but the tone and language are mostly natural. Consider adding more specific details or anecdotes to reduce the risk of AI detection.",
+              "brand_voice_match": "The tone is mostly authentic and confident, but the phrase 'no shallow conversations here' feels slightly forced. Consider rephrasing to 'we prioritize meaningful conversations' to better match the expected tone.",
+              "platform_compliance": "The post is well-formatted and concise, but consider adding a visual element to make it more engaging.",
+              "engagement_potential": "The hook is strong, but the post could benefit from a more specific example or anecdote to make it more relatable."
+            },
+            "cta_present": 0.8,
+            "originality": 0.7,
+            "quality_score": 0.73,
+            "ai_detection_risk": 0.4,
+            "brand_voice_match": 0.8,
+            "platform_compliance": 0.9,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 2,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794165Z"
+        },
+        {
+          "id": "4ea18a9b-1ad5-487c-9d89-45f209268384",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 1,
+          "platform": "twitter",
+          "format": "caption",
+          "copy": "Tired of shallow conversations on dating apps? We ditch the generic questions and focus on real connections. If you're done wasting time, we've got 5x the matches in a quarter the time. Welcome to a better way.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/uodmGefjSwthGEjhY5z6YaPava74cjdOzJWUCMou94dMbFJWA/tmpxymimxtd.webp"
+          ],
+          "hashtags": [
+            "datingapp",
+            "realconnections"
+          ],
+          "validation_score": 0.73,
+          "validation_details": {
+            "feedback": {
+              "cta_present": "The call-to-action is clear and natural, but it could be more specific. Consider adding a sense of urgency or a limited-time offer to make it more compelling.",
+              "originality": "The post feels fresh and specific, but it could be more unique. Consider adding a personal perspective or a unique insight to make it stand out.",
+              "ai_detection_risk": "The post is at risk of being flagged as AI-generated due to the use of generic phrases like 'a better way.' Consider adding more personal touches or unique language to make it feel more human.",
+              "brand_voice_match": "The tone is mostly authentic and confident, but it could be more down-to-earth and inclusive. Consider adding a personal touch or a relatable anecdote to make it feel more human.",
+              "platform_compliance": "The post is within the character limit, but it's a bit long for a Twitter thread. Consider breaking it up into smaller, more digestible chunks.",
+              "engagement_potential": "The hook is strong, but it could be more attention-grabbing. Consider starting with a provocative statement or a surprising statistic."
+            },
+            "cta_present": 0.9,
+            "originality": 0.7,
+            "quality_score": 0.73,
+            "ai_detection_risk": 0.4,
+            "brand_voice_match": 0.8,
+            "platform_compliance": 0.9,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 2,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794186Z"
+        }
+      ]
+    },
+    {
+      "day_number": 2,
+      "theme": "Meet Your Match",
+      "pieces": [
+        {
+          "id": "1c7d3806-0000-4207-b6ee-cd786e4faa61",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 2,
+          "platform": "instagram",
+          "format": "caption",
+          "copy": "Dating apps can be a real drag \u2013 endless swiping, shallow conversations, and way too many guys who think they're a 'cool dude with a sense of humor'. \ud83d\ude44\n\nWe're not here to waste your time. Our profiles are more than just a list of generic answers. We ask the real questions: what's your idea of a perfect weekend? How do you handle disagreements? And most importantly, what are you actually looking for in a partner?\n\nThat's what makes us different. Not flashy, not complicated \u2013 just genuinely good matches. Meet. Your. Match. Not just anyone.\n\nTired of the dating app cycle? Join the Pluto community and skip the nonsense.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/VCvO3qYqQnIYKFnJ3gzsk2ECgX1rpKneantBfCPUsjMIcFJWA/tmp634cwik3.webp"
+          ],
+          "hashtags": [
+            "Dating App Burnout",
+            "Real Matches Only",
+            "Skip The Nonsense"
+          ],
+          "validation_score": 0.73,
+          "validation_details": {
+            "feedback": {
+              "cta_present": "The call-to-action is clear and natural, but consider rephrasing 'skip the nonsense' to something more positive and inclusive.",
+              "originality": "The post feels fresh and specific, but the use of the phrase 'not flashy, not complicated' is a common trope. Consider rephrasing to something more unique to PlutoApp.",
+              "ai_detection_risk": "The post is at risk of being flagged as AI-generated due to the use of generic phrases like 'tired of the dating app cycle' and 'skip the nonsense'. Consider rephrasing to something more unique and authentic.",
+              "brand_voice_match": "The tone is generally authentic and confident, but the phrase 'tired of the dating app cycle' feels slightly generic. Consider rephrasing to something more unique to PlutoApp.",
+              "platform_compliance": "The post is well-formatted and within Instagram's character limit. However, consider adding more visuals to break up the text and make it more engaging.",
+              "engagement_potential": "The hook is strong, but the post could benefit from a more attention-grabbing opening sentence. Consider starting with a surprising statistic or a thought-provoking question."
+            },
+            "cta_present": 0.9,
+            "originality": 0.7,
+            "quality_score": 0.73,
+            "ai_detection_risk": 0.4,
+            "brand_voice_match": 0.8,
+            "platform_compliance": 0.9,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 2,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794194Z"
+        }
+      ]
+    },
+    {
+      "day_number": 3,
+      "theme": "Weekend Vibes",
+      "pieces": [
+        {
+          "id": "d418a813-a4fe-4919-8079-3ce7b2cc5fd1",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 3,
+          "platform": "instagram",
+          "format": "caption",
+          "copy": "We're done with shallow conversations and endless swiping. So are you. Meet someone who's actually worth your time. At Pluto, we ask the tough questions first. Like, what's a real relationship to you? How do you handle disagreements? We're not for people who want to collect options. We're for those looking for something real. Like Priya, who met her partner in just one hour of swiping. Or Rohan, who found his best friend on our platform. Ready to meet someone who's on the same page? Link in bio to get started. #PlutoApp #RealConnections #NoSmallTalk",
+          "image_urls": [
+            "https://replicate.delivery/xezq/NPurWteV3c1KDS3Lj2Tx4eHCAJSs2CmbxwEOrAcJMiVXcFJWA/tmpgi80jt2z.webp"
+          ],
+          "hashtags": [
+            "RealConnections",
+            "NoSmallTalk",
+            "PlutoApp"
+          ],
+          "validation_score": 0.73,
+          "validation_details": {
+            "feedback": "Good job on capturing the tone of PlutoApp. However, the language is not entirely authentic and confident. For example, the phrase 'So are you' comes across as slightly insincere. Consider rephrasing it to something more direct and confident. Additionally, the use of the word 'real' is repeated multiple times, which may feel like a marketing clich\u00e9. To improve originality, try to use more specific and unique examples of users who have found success on the platform. Lastly, be cautious of the AI detection risk by avoiding overly generic phrases like 'Meet someone who's actually worth your time'.",
+            "cta_present": 0.9,
+            "originality": 0.7,
+            "quality_score": 0.73,
+            "ai_detection_risk": 0.4,
+            "brand_voice_match": 0.8,
+            "platform_compliance": 0.9,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 2,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794201Z"
+        }
+      ]
+    },
+    {
+      "day_number": 4,
+      "theme": "Safety First",
+      "pieces": [
+        {
+          "id": "f944af5a-535f-44c7-87db-f18514b04e98",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 4,
+          "platform": "linkedin",
+          "format": "caption",
+          "copy": "At Pluto, we don't think online safety is optional. That's why we've built a system that verifies identities and ensures a safe experience for our users. Here's how it works: we ask real questions before you see a single profile, not just 'what's your height' but how you handle disagreements, what your ideal weekend looks like. We're not looking for someone who only checks the boxes. If that's you \u2013 someone who's tired of endless swiping and ready to meet someone worth your time \u2013 welcome.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/khlIeO6h8zw7TCQnpRDX2RRMngpwDtHqRlB4e8UGRF7aaFJWA/tmp6dn_8jzu.webp"
+          ],
+          "hashtags": [
+            "OnlineSafety",
+            "DatingApp",
+            "MadeInIndia"
+          ],
+          "validation_score": 0.845,
+          "validation_details": {
+            "feedback": {
+              "cta_present": "The call-to-action is implicit, but the phrase 'ready to meet someone worth your time' effectively encourages users to take action.",
+              "originality": "The post feels fresh and specific, but consider adding more unique details to make it stand out.",
+              "ai_detection_risk": "The post is well-written and lacks any obvious AI-generated phrases.",
+              "brand_voice_match": "The tone is mostly authentic, confident, down-to-earth, inclusive, and straightforward, but the phrase 'welcome' at the end feels slightly forced. Consider rephrasing to maintain consistency.",
+              "platform_compliance": "The post is well-formatted and suitable for LinkedIn, but consider shortening it to 2-3 sentences to improve engagement.",
+              "engagement_potential": "The hook is strong, but the post could benefit from a more attention-grabbing opening sentence."
+            },
+            "cta_present": 0.9,
+            "originality": 0.8,
+            "quality_score": 0.845,
+            "ai_detection_risk": 0.0,
+            "brand_voice_match": 0.9,
+            "platform_compliance": 0.9,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 0,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794207Z"
+        }
+      ]
+    },
+    {
+      "day_number": 5,
+      "theme": "Behind the Scenes",
+      "pieces": [
+        {
+          "id": "600a8ad2-60cb-4eac-aaef-733257841268",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 5,
+          "platform": "twitter",
+          "format": "caption",
+          "copy": "We don't ask how much you've got, but how much you're willing to use. Real conversations for people who aren't afraid to be themselves. Join the crew if you're not just looking for a ride, but a partner.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/KzBcRiS9eH0ULSJsApk6eNoNOmCiufbw1fHeoSieKth6uWRiF/tmpp7i7928f.webp"
+          ],
+          "hashtags": [
+            "PlutoAppCommunity"
+          ],
+          "validation_score": 0.83,
+          "validation_details": {
+            "feedback": "The tone is mostly authentic and confident, but the phrase 'Join the crew' could be more down-to-earth. Consider rephrasing to 'Join us' or 'Be part of our community'.",
+            "cta_present": 1.0,
+            "originality": 0.8,
+            "quality_score": 0.83,
+            "ai_detection_risk": 0.2,
+            "brand_voice_match": 0.8,
+            "platform_compliance": 1.0,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 1,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794213Z"
+        }
+      ]
+    },
+    {
+      "day_number": 6,
+      "theme": "Maha Shivratri Special",
+      "pieces": [
+        {
+          "id": "ba943e12-6bc5-4b8b-a024-c39fcd8cdea6",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 6,
+          "platform": "instagram",
+          "format": "caption",
+          "copy": "Ditching shallow dating profiles was a no-brainer. We created PlutoApp for people who aren't just looking for a profile picture, but someone to connect with on a real level. \n\nWe focus on the good stuff: how you tackle disagreements, what you do on a Sunday morning, and what 'a perfect date' means to you. No generic questions or superficial answers. Just genuine people, looking for genuine connections.\n\nWhat sets us apart? Our questions are designed to cut through the noise and find you someone who's actually worth your time. \n\nIf you've found love through PlutoApp, share your story: how did we help you find the one? Comment below. If that's you, welcome.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/4frAuvx9Fn0LSKCMvrQqniQu7RB6wTBO6qgoZQzZOmfraFJWA/tmplmgz2ub1.webp"
+          ],
+          "hashtags": [
+            "#MadeInIndiaMadeForIndia",
+            "#PlutoAppLoveStories"
+          ],
+          "validation_score": 0.84,
+          "validation_details": {
+            "feedback": "Overall, a good job on capturing the PlutoApp tone. However, consider rephrasing 'what 'a perfect date' means to you' to 'what makes a perfect date for you' for better grammar and flow. Also, ensure that the story prompt is clear and concise. The current phrasing 'how did we help you find the one?' could be rephrased to 'share your love story with us!' for better engagement.",
+            "cta_present": 0.8,
+            "originality": 0.8,
+            "quality_score": 0.84,
+            "ai_detection_risk": 0.0,
+            "brand_voice_match": 0.9,
+            "platform_compliance": 0.9,
+            "engagement_potential": 0.8
+          },
+          "regeneration_count": 2,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794219Z"
+        }
+      ]
+    },
+    {
+      "day_number": 7,
+      "theme": "Weekend Reflections",
+      "pieces": [
+        {
+          "id": "05b20bba-3a83-4a32-a0c1-33df17a39efe",
+          "job_id": "1add97e5-46ea-4dac-a608-629caf66716c",
+          "brand_id": "2a42af06-0187-40f4-b5a3-47df29bee275",
+          "day_number": 7,
+          "platform": "linkedin",
+          "format": "caption",
+          "copy": "I've spent years watching people struggle to find meaningful connections in their social lives. And let's be honest, it's exhausting. That's why I'm so passionate about Pluto \u2013 it's the first platform that truly gets what we Indians are looking for in a social experience. We're not about shallow conversations or endless swiping. We're about genuine connections that actually matter. If you're tired of pretending to be someone you're not, and want to focus on the right people, join our community. We're not a bunch of idealists, we're just people who've been there, done that, and got the t-shirt. And we're committed to helping you find real connections that will change your life.",
+          "image_urls": [
+            "https://replicate.delivery/xezq/h4k5KydVz56mLRCed2yvbEPCCOKdicinhoydUcbre8fp3KSsA/tmp_6z57tev.webp"
+          ],
+          "hashtags": [
+            "IndianStartup",
+            "SocialConnections",
+            "GenuineCommunities"
+          ],
+          "validation_score": 0.69,
+          "validation_details": {
+            "feedback": {
+              "cta_present": "The call-to-action is clear and natural, but consider rephrasing 'join our community' to 'join our community today' to make it more actionable.",
+              "originality": "The post feels fresh, but the phrase 'we're about genuine connections that actually matter' is a common trope. Consider rephrasing to make it more specific to PlutoApp.",
+              "ai_detection_risk": "The post is at risk of being flagged as AI-generated due to the use of generic phrases like 'we're not about shallow conversations or endless swiping'. Consider rephrasing to make it more conversational and specific.",
+              "brand_voice_match": "The tone is mostly authentic and confident, but the phrase 'we're not a bunch of idealists' feels slightly defensive. Consider rephrasing to 'we're just people who've been there, done that, and got the t-shirt' to maintain a more down-to-earth tone.",
+              "platform_compliance": "The post is a good length and format for LinkedIn, but consider adding a visual element to make it more engaging.",
+              "engagement_potential": "The hook is strong, but the post could benefit from a more specific example or anecdote to make it more relatable."
+            },
+            "cta_present": 0.9,
+            "originality": 0.6,
+            "quality_score": 0.69,
+            "ai_detection_risk": 0.4,
+            "brand_voice_match": 0.8,
+            "platform_compliance": 0.8,
+            "engagement_potential": 0.7
+          },
+          "regeneration_count": 2,
+          "status": "validated",
+          "created_at": "2026-02-19T05:49:50.794225Z"
+        }
+      ]
+    }
+  ]
+}

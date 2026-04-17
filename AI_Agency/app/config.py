@@ -1,0 +1,43 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    # Database — defaults to local SQLite (no external DB needed)
+    # Set DATABASE_URL in .env to use PostgreSQL instead
+    database_url: str = "sqlite+aiosqlite:///./content_engine.db"
+
+    # Groq LLM
+    groq_api_key: str = ""
+    groq_model_creator: str = "llama-3.1-8b-instant"
+    groq_model_validator: str = "llama-3.1-8b-instant"
+
+    # Anthropic Claude
+    anthropic_api_key: str = ""
+    claude_model_creator: str = "claude-sonnet-4-5-20250929"
+    claude_model_validator: str = "claude-haiku-4-5-20251001"
+    llm_provider: str = "claude"  # "claude" or "groq"
+
+    # OpenAI (for vision/style extraction)
+    openai_api_key: str = ""
+
+    # Replicate (image generation)
+    replicate_api_token: str = ""
+
+    # Google Drive
+    google_credentials_path: str = ""
+    google_drive_root_folder_id: str = ""
+
+    # Notion
+    notion_token: str = ""
+    notion_page_id: str = ""
+
+    # Generation settings
+    max_validation_loops: int = 3
+    min_quality_score: float = 0.8
+    max_concurrent_llm_calls: int = 5
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
