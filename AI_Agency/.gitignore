@@ -9,3 +9,13 @@ dist/
 build/
 .pytest_cache/
 .DS_Store
+
+# Client data + generated output (never commit)
+content_engine.db
+content_engine.db-journal
+*.sqlite
+*.sqlite-journal
+output/
+output_*/
+output_*.csv
+output_*.json
