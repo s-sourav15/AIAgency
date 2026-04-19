@@ -13,6 +13,11 @@ from app.prompts.validation import scoring_prompt
 from app.prompts.copy_generation import regeneration_prompt
 from app.prompts.brand_voice import voice_injection_block
 from app.utils.llm_factory import get_llm_client, get_model_name
+from app.utils.slop_check import (
+    apply_slop_penalty,
+    check_slop,
+    compute_quality_score,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -100,12 +105,28 @@ async def _validate_and_regen(
                     await db.commit()
                     return
 
-                quality = scores.get("quality_score", 0.5)
+                # Python-side slop check. Belt-and-suspenders: the LLM is also
+                # told about the banned list, but we don't trust it to enforce.
+                slop = check_slop(piece.copy or "")
+                scores = apply_slop_penalty(scores, slop)
+
+                # Compute quality_score in Python, not as LLM-side prompt math.
+                quality = compute_quality_score(scores)
+                scores["quality_score"] = quality
+
                 piece.validation_score = quality
                 piece.validation_details = scores
-                piece.validation_feedback = _feedback_to_str(scores.get("feedback", ""))
+                llm_feedback = _feedback_to_str(scores.get("feedback", ""))
+                slop_feedback = slop.feedback()
+                combined_feedback = (
+                    f"{llm_feedback} || SLOP: {slop_feedback}"
+                    if slop_feedback
+                    else llm_feedback
+                )
+                piece.validation_feedback = combined_feedback
 
-                if quality >= settings.min_quality_score:
+                # Pass threshold = score OK AND no forced-regen from slop hits.
+                if quality >= settings.min_quality_score and not slop.should_regen:
                     piece.status = "validated"
                     await db.commit()
                     return
@@ -122,7 +143,15 @@ async def _validate_and_regen(
 
                 # Regenerate with feedback
                 voice_block = voice_injection_block(brand_name, voice_profile)
-                feedback_str = _feedback_to_str(scores.get("feedback", "Improve overall quality"))
+                base_feedback = _feedback_to_str(
+                    scores.get("feedback", "Improve overall quality")
+                )
+                slop_feedback = slop.feedback()
+                feedback_str = (
+                    f"{base_feedback}\n\nSLOP ISSUES: {slop_feedback}"
+                    if slop_feedback
+                    else base_feedback
+                )
                 regen_messages = regeneration_prompt(
                     platform=piece.platform,
                     original_copy=piece.copy,
