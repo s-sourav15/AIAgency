@@ -31,6 +31,11 @@ class Settings(BaseSettings):
     notion_token: str = ""
     notion_page_id: str = ""
 
+    # CORS — comma-separated list of allowed origins, or "*" to allow all
+    # (NOTE: "*" with credentials is disallowed by browsers and insecure;
+    # keep defaults to localhost dev ports).
+    allowed_origins: str = "http://localhost:3000,http://localhost:8000"
+
     # Generation settings
     max_validation_loops: int = 3
     min_quality_score: float = 0.8

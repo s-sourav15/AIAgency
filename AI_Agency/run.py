@@ -24,59 +24,34 @@ BASE_URL = "http://localhost:8000/api"
 # INPUT — Edit this section
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-BRAND_NAME = "PlutoApp"
+BRAND_NAME = "YourBrand"
 
 BRAND_DESCRIPTION = """
-Pluto is a social discovery app that understands your social comfort, energy levels, and the personalities you want to connect with, then matches you with the right people and real-world experiences.
-
-Unlike existing apps that keep you scrolling, Pluto gently nudges you from screen to scene—building a social media platform for real experiences instead of endless content consumption.
-
-Psych-based matching: We match on social comfort, energy level, and personality—not just interests and location.
-
-Experience-first design: Your feed is plans, scenes, and reflections, not just content to consume.
-
-Screen to scene philosophy: The app's core purpose is to get you offline and into meaningful real-world experiences.
-
-Your personal orbit: Track your connections, experiences, and social patterns over time.
-
-Two Connections, Full Attention: No more juggling fifteen half-hearted conversations. Connect with two people at a time and give each one a real chance.
-
-Verified and Safe: Aadhaar-based identity verification on every profile. SOS emergency contacts for when you're heading out to meet someone. Safety isn't an afterthought.
+A 1-2 paragraph description of your brand: what you make, who it's for, what makes it different.
+Be specific. Use concrete words. Avoid marketing-speak.
+Example: "A direct-to-consumer skincare line for Indian urban women in their 20s-30s. Cold-processed, ayurveda-inspired, priced between mass-market and luxury. Ships from Bangalore."
 """
 
-TONE = "playful, warm, witty, Gen-Z friendly, anti-corporate, real-talk"
-INDUSTRY = "social discovery"
-COLORS = ["#6C5CE7", "#A29BFE", "#FFEAA7", "#FFFFFF"]
-FONTS = ["Inter", "Poppins"]
+TONE = "conversational, confident, anti-corporate"
+INDUSTRY = "d2c"
+COLORS = ["#000000", "#FFFFFF"]
+FONTS = ["Inter"]
 
 # Paste 2-5 examples of your brand's existing content/writing style
 SAMPLE_CONTENT = [
-    "Made in India, Made for India: Whether you're in Delhi, Mumbai, Bangalore, or anywhere in between, Pluto understands what meaningful connection looks like here. Not imported. Not translated. Built from the ground up.",
-    "Pluto isn't for people looking to collect options. It's for people ready to actually meet someone. If that's you, welcome.",
-    "Unlike existing event and meetup apps that mostly match on location and interest, Pluto understands how you like to socialize—your comfort, energy and personality—and then nudges you from screen to scene, making it the first social media truly built around experiences.",
-    "Existing apps either help you swipe on profiles or browse events, but very few understand how you actually feel—your social comfort and energy—before suggesting what to do.",
-    "Pluto is building social media for experiences: it learns your orbit—comfort, energy, people, and scenes—and gently nudges you from screen to scene, instead of trapping you in infinite scroll.",
+    "Example post 1 — paste a real caption or tweet from your brand here.",
+    "Example post 2 — another real example of how your brand writes.",
+    "Example post 3 — one more, ideally from a different platform or tone.",
 ]
 
-# This is the seed text the AI uses to generate content
+# This is the seed text the AI uses to generate content.
+# Paste a blog post, product description, brand story, or positioning doc.
 CONTENT_BRIEF = """
-We live in a world where reality is perceived through reels and photos online. This has created three major challenges: Rising urban isolation—despite being digitally hyperconnected, people feel increasingly lonely and disconnected from real human interaction. Digital platform addiction—users are trapped in endless scrolling, consuming content rather than creating experiences. Consumer culture dominance—the majority of platform users are passive consumers rather than active curators of their own lives.
+Paste your brand's seed content here: a blog post, product description, brand story,
+positioning doc, or anything else that captures what you want to talk about.
 
-We experience this ourselves—the disconnect between our online personas and our real-world experiences.
-
-That's why we created Pluto – Find Your Orbit.
-
-Pluto is a social discovery app that understands your social comfort, energy levels, and the personalities you want to connect with, then matches you with the right people and real-world experiences. Unlike existing apps that keep you scrolling, Pluto gently nudges you from screen to scene—building a social media platform for real experiences instead of endless content consumption.
-
-Psych-based matching: We match on social comfort, energy level, and personality—not just interests and location. Experience-first design: Your feed is plans, scenes, and reflections, not just content to consume. Screen to scene philosophy: The app's core purpose is to get you offline and into meaningful real-world experiences. Your personal orbit: Track your connections, experiences, and social patterns over time.
-
-India's "experience economy" is growing rapidly, with offline experiences becoming social currency for young urban users. Screen fatigue is real, and people are actively seeking authentic connections and meaningful activities. The timing is perfect: users want tools that help them reclaim real life, not more platforms that trap them online.
-
-No competitor has claimed "social comfort + energy matching" combined with "screen to scene" positioning. The model works across life stages, cities, and demographic segments. Pluto is Meetup for the short-form, mobile-native generation—focusing on personal comfort, micro-plans, and an experience-style feed instead of large formal groups.
-
-Pluto avoids the dating-first framing, focusing on safe, comfort-aligned social experiences and anti-catfishing/over-optimized profile culture. Every profile is verified through Aadhaar-based identity checks. Built-in SOS features let you alert your emergency contacts instantly.
-
-Launch with curated events offering incentives—free vouchers, exclusive experiences—to build the initial user base. Machine learning models improve matching accuracy over time based on user behavior and feedback. Track "scenes completed" as the key success metric—measure actual offline experiences, not just app engagement.
+The AI uses this as source material for the 30-day calendar. More specificity → better output.
+Aim for 200-800 words of your actual brand voice.
 """
 
 # Which platforms to generate content for
@@ -85,16 +60,11 @@ PLATFORMS = ["instagram", "twitter", "linkedin"]
 # (Optional) Reference images for visual style extraction.
 # The model analyzes ALL images together to understand your overall visual theme.
 # Add 2-5 representative brand images (social posts, ads, product shots, etc.)
+# Paths can be absolute or relative to this script.
 BRAND_ILLUSTRATIONS = [
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-00.jpg",
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-06.jpg",
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-11.jpg",
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-13.jpg",
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-16.jpg",
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-18.jpg",
-    "/Users/soumyasourav/Downloads/Telegram Desktop/photo_2026-03-10_22-02-21.jpg"
-    # "/path/to/another/brand_image.png",
-    # "/path/to/social_post_screenshot.jpg",
+    # "/absolute/path/to/brand_image_1.jpg",
+    # "/absolute/path/to/brand_image_2.jpg",
+    # "relative/path/to/brand_image_3.png",
 ]
 
 # How many days of content to generate

@@ -13,6 +13,9 @@ class GenerationJob(Base):
     brand_id = Column(String(36), ForeignKey("brands.id"), nullable=False)
     input_type = Column(String(50), nullable=False)  # photo, blog, text
     input_data = Column(Text, nullable=True)
+    # TODO: remove when photo-upload ships and migrations land. Not written
+    # to by any current code path. Safe to keep as NULL for now; dropping
+    # requires alembic migration infra we don't have yet.
     input_image_url = Column(String(500), nullable=True)
     status = Column(String(50), default="pending")
     platforms = Column(JSON, default=list)

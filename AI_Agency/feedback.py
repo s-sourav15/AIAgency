@@ -22,7 +22,7 @@ BASE_URL = "http://localhost:8000/api"
 # INPUT — Fill in your feedback
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-BRAND_NAME = "PlutoApp"  # must match run.py
+BRAND_NAME = "YourBrand"  # must match run.py
 
 # ── TEXT FEEDBACK ─────────────────────────────────────────────────
 
@@ -136,56 +136,9 @@ PLATFORM_ASPECT = {
 }
 
 
-def _build_image_prompt(
-    copy: str,
-    platform: str,
-    brand_name: str,
-    brand_description: str,
-    colors: list,
-    visual_style: dict | None,
-    feedback: str,
-) -> str:
-    """Build a FLUX image prompt incorporating feedback."""
-    color_str = ", ".join(colors[:3]) if colors else "vibrant purple and gold"
-    copy_snippet = copy[:200].replace('"', "").replace("\n", " ")
-
-    if visual_style and visual_style.get("style_prompt"):
-        style_block = visual_style["style_prompt"]
-        art_style = visual_style.get("art_style", "illustration")
-        mood = visual_style.get("mood", "modern")
-        base = (
-            f"{art_style} style visual for {platform} post. "
-            f"Brand: {brand_name}. Color palette: {color_str}. "
-            f"Context: {copy_snippet}. Mood: {mood}. "
-            f"{style_block} "
-        )
-    else:
-        base = (
-            f"Modern illustration style social media visual for {platform}. "
-            f"Brand: {brand_name} — {brand_description[:100]}. "
-            f"Color palette: {color_str}. "
-            f"Context: {copy_snippet}. "
-            f"Style: clean illustration, trendy Gen-Z aesthetic, bold colors, "
-            f"flat design with depth, Indian urban setting. "
-        )
-
-    # Inject feedback as priority instructions
-    base += f"IMPORTANT ADJUSTMENTS: {feedback}. "
-    base += "No text, no watermarks, no logos. High quality, 4K."
-    return base
-
-
-async def _download_image(url: str, save_path: str) -> bool:
-    try:
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.get(url)
-            resp.raise_for_status()
-            with open(save_path, "wb") as f:
-                f.write(resp.content)
-            return True
-    except Exception as e:
-        print(f"  [warn] Image download failed: {e}")
-        return False
+# Image prompt + download helpers live in app.services.image_service.
+# They used to be duplicated here — removed to avoid drift.
+from app.services.image_service import build_image_prompt, download_image
 
 
 async def run_feedback():
@@ -315,7 +268,7 @@ async def run_feedback():
                     print(f"Day {day_num} — {platform.upper()} [IMAGE]")
                     print(f"  Feedback : {image_fb[:120]}")
 
-                    prompt = _build_image_prompt(
+                    prompt = build_image_prompt(
                         copy=copy_for_prompt,
                         platform=platform,
                         brand_name=brand_name,
@@ -346,7 +299,7 @@ async def run_feedback():
                         filename = f"day{day_num}_{platform}.{ext}"
                         local_path = os.path.join(images_dir, filename)
 
-                        if await _download_image(image_url, local_path):
+                        if await download_image(image_url, local_path):
                             piece["image_urls"] = [local_path]
                             print(f"  Saved    : {local_path}")
                         else:

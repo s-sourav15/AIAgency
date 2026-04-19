@@ -37,11 +37,30 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+def _parse_allowed_origins(raw: str) -> list[str]:
+    """Parse the ALLOWED_ORIGINS env var into a list.
+
+    Rules:
+    - Comma-separated values, whitespace-trimmed, empties dropped.
+    - "*" is allowed only if credentials are NOT required.
+      Browsers reject "*" + credentials=True, and this combo is a CSRF
+      footgun behind misconfigured proxies. We defensively drop it.
+    """
+    items = [o.strip() for o in (raw or "").split(",") if o.strip()]
+    # Never allow wildcard with credentials.
+    items = [o for o in items if o != "*"]
+    return items
+
+
+_settings = Settings()
+_origins = _parse_allowed_origins(_settings.allowed_origins)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
