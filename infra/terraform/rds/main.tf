@@ -76,11 +76,6 @@ resource "random_password" "master" {
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "${local.name_prefix}-rds-credentials"
   description = "RDS PostgreSQL credentials for ${local.name_prefix}"
-
-  tags = {
-    Project = var.project_name
-    Env     = var.env
-  }
 }
 
 resource "aws_secretsmanager_secret_version" "rds_credentials" {
