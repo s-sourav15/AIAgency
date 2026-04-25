@@ -19,3 +19,6 @@ output/
 output_*/
 output_*.csv
 output_*.json
+
+# Alembic temp
+*.db-wal
