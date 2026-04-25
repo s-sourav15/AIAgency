@@ -22,7 +22,7 @@ aiagency-prod-postgres.cqtc8twm2l5o.ap-south-1.rds.amazonaws.com:5432
 ## Secrets Manager
 
 - **ARN:** arn:aws:secretsmanager:ap-south-1:474132537731:secret:aiagency-prod-rds-credentials-z5fPtR
-- **Status:** Secret created but value not yet populated (the instance role lacks `secretsmanager:PutSecretValue` permission). Credentials are in `terraform.tfstate` (local, never committed). A user with sufficient IAM permissions should run `terraform apply` to populate the secret, or manually store the credentials via the AWS console.
+- **Status:** ✅ Populated. JSON fields: `{username, password, host, port, dbname, engine}`. Retrieve with `aws secretsmanager get-secret-value --region ap-south-1 --secret-id aiagency-prod-rds-credentials --query SecretString --output text`.
 
 ## DATABASE_URL Format
 
@@ -30,16 +30,13 @@ aiagency-prod-postgres.cqtc8twm2l5o.ap-south-1.rds.amazonaws.com:5432
 postgresql+asyncpg://aiagency_admin:<password>@aiagency-prod-postgres.cqtc8twm2l5o.ap-south-1.rds.amazonaws.com:5432/aiagency
 ```
 
-Password must be URL-encoded. Retrieve from terraform state:
+Password must be URL-encoded. Retrieve from Secrets Manager:
 ```bash
-cd infra/terraform/rds
-terraform show -json | python3 -c "
-import sys, json, urllib.parse
-state = json.load(sys.stdin)
-for r in state['values']['root_module']['resources']:
-    if r['address'] == 'random_password.master':
-        print(urllib.parse.quote_plus(r['values']['result']))
-"
+aws secretsmanager get-secret-value \
+  --region ap-south-1 \
+  --secret-id aiagency-prod-rds-credentials \
+  --query SecretString --output text \
+  | python3 -c "import sys,json,urllib.parse as u; d=json.loads(sys.stdin.read()); print(f\"postgresql+asyncpg://{d['username']}:{u.quote_plus(d['password'])}@{d['host']}:{d['port']}/{d['dbname']}\")"
 ```
 
 ## Migration Status
@@ -49,7 +46,7 @@ for r in state['values']['root_module']['resources']:
 
 ## Follow-ups
 
-- [ ] Grant the instance role `secretsmanager:*` permissions and re-run `terraform apply` to populate the secret
+- [x] ~~Grant the instance role `secretsmanager:*` permissions and re-run `terraform apply` to populate the secret~~ — Done 2026-04-25
 - [ ] Enable Multi-AZ when production load justifies cost
 - [ ] Add custom parameter group with `pg_stat_statements`
 - [ ] Consider pgvector for embedding storage
