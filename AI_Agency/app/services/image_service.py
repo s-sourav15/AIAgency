@@ -23,15 +23,20 @@ PLATFORM_ASPECT = {
 }
 
 
-def _build_image_prompt(
+def build_image_prompt(
     copy: str,
     platform: str,
     brand_name: str,
     brand_description: str,
     colors: list,
     visual_style: dict | None = None,
+    feedback: str | None = None,
 ) -> str:
-    """Turn content copy into an image generation prompt."""
+    """Turn content copy into an image generation prompt.
+
+    If ``feedback`` is provided, it's injected as high-priority adjustment
+    instructions (used by the feedback/regeneration flow).
+    """
     color_str = ", ".join(colors[:3]) if colors else "vibrant purple and gold"
     copy_snippet = copy[:200].replace('"', "").replace("\n", " ")
 
@@ -40,28 +45,32 @@ def _build_image_prompt(
         style_block = visual_style["style_prompt"]
         art_style = visual_style.get("art_style", "illustration")
         mood = visual_style.get("mood", "modern")
-        return (
+        base = (
             f"{art_style} style visual for {platform} post. "
             f"Brand: {brand_name}. Color palette: {color_str}. "
             f"Context: {copy_snippet}. "
             f"Mood: {mood}. "
             f"{style_block} "
-            f"No text, no watermarks, no logos. High quality, 4K."
+        )
+    else:
+        # Default prompt
+        base = (
+            f"Modern illustration style social media visual for {platform}. "
+            f"Brand: {brand_name} — {brand_description[:100]}. "
+            f"Color palette: {color_str}. "
+            f"Context: {copy_snippet}. "
+            f"Style: clean illustration, trendy Gen-Z aesthetic, "
+            f"bold colors, flat design with depth, Indian urban setting. "
         )
 
-    # Default prompt
-    return (
-        f"Modern illustration style social media visual for {platform}. "
-        f"Brand: {brand_name} — {brand_description[:100]}. "
-        f"Color palette: {color_str}. "
-        f"Context: {copy_snippet}. "
-        f"Style: clean illustration, trendy Gen-Z aesthetic, no text overlays, "
-        f"bold colors, flat design with depth, Indian urban setting. "
-        f"High quality, 4K, professional social media content."
-    )
+    if feedback:
+        base += f"IMPORTANT ADJUSTMENTS: {feedback}. "
+
+    base += "No text, no watermarks, no logos. High quality, 4K."
+    return base
 
 
-async def _download_image(url: str, save_path: str) -> bool:
+async def download_image(url: str, save_path: str) -> bool:
     """Download image from URL and save locally."""
     try:
         async with httpx.AsyncClient(timeout=60) as client:
@@ -73,6 +82,12 @@ async def _download_image(url: str, save_path: str) -> bool:
     except Exception as e:
         logger.error(f"Failed to download image: {e}")
         return False
+
+
+# Backwards-compatible aliases for any external callers that still use the
+# private names. Safe to remove once all call sites are migrated.
+_build_image_prompt = build_image_prompt
+_download_image = download_image
 
 
 async def generate_images_for_job(
@@ -111,7 +126,7 @@ async def generate_images_for_job(
         failed = 0
 
         for piece in pieces:
-            prompt = _build_image_prompt(
+            prompt = build_image_prompt(
                 piece.copy, piece.platform, brand_name, brand_desc, colors,
                 visual_style=visual_style,
             )
@@ -136,7 +151,7 @@ async def generate_images_for_job(
                 filename = f"day{piece.day_number}_{piece.platform}.{ext}"
                 local_path = os.path.join(images_dir, filename)
 
-                downloaded = await _download_image(image_url, local_path)
+                downloaded = await download_image(image_url, local_path)
 
                 async with session_factory() as db:
                     p = await db.get(ContentPiece, piece.id)

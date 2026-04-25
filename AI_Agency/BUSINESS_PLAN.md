@@ -221,8 +221,8 @@ Gross margin: 93-97% across all tiers
 
 ### Phase 1: Validate (Week 1-2)
 - Build MVP pipeline (FastAPI + Claude + FLUX)
-- Use Pluto (our own app) as Case Study #1
-- Generate Pluto's 30-day content calendar as portfolio piece
+- Use an internal pilot brand as Case Study #1
+- Generate the pilot brand's 30-day content calendar as portfolio piece
 
 ### Phase 2: First Clients (Week 3-6)
 - Pick 10-15 D2C brands on Instagram (1K-50K followers, mediocre content)
@@ -248,8 +248,8 @@ Gross margin: 93-97% across all tiers
 ## 8. Technical Architecture (MVP)
 
 ### Stack
-- Backend: Python FastAPI (same as Pluto ML API — no new stack)
-- Database: Supabase PostgreSQL (shared infra with Pluto)
+- Backend: Python FastAPI
+- Database: Supabase PostgreSQL
 - Storage: Supabase Storage (brand assets, generated images)
 - LLM: Claude Sonnet (creation) + Claude Haiku (validation)
 - Image: FLUX via Replicate API (pay-per-use)
@@ -264,7 +264,7 @@ Input → Brand Context → Creator LLM → Validator LLM → Output
 
 ### What We Build in 2 Weeks
 Week 1: Brand ingestion + Creator module + Validator loop
-Week 2: Output formatter + Pluto case study + Demo script
+Week 2: Output formatter + internal pilot case study + Demo script
 
 ### What We DON'T Build Yet
 - Frontend portal (after 5 paying clients)
