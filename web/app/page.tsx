@@ -150,7 +150,7 @@ const faqs = [
   {
     question: "How is this different from ChatGPT / Canva AI / Predis?",
     answer:
-      "Those tools give you one post at a time. Kappa gives you a full 30-day calendar across all platforms, in your brand voice, with anti-slop validation. You get a complete content strategy, not a blank prompt.",
+      "Those tools give you one post at a time. Utsuk gives you a full 30-day calendar across all platforms, in your brand voice, with anti-slop validation. You get a complete content strategy, not a blank prompt.",
   },
   {
     question: "What if I don't like the output?",
@@ -186,7 +186,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="text-xl font-bold tracking-tight">
-            Kappa
+            Utsuk
           </Link>
           <nav className="flex items-center gap-4">
             <Link
@@ -274,10 +274,10 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Why Kappa */}
+        {/* Why Utsuk */}
         <section className="py-20 sm:py-28">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">Why Kappa</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Why Utsuk</h2>
             <p className="mt-3 text-muted-foreground text-lg">
               Content tools are everywhere. Here&apos;s why this one is
               different.
@@ -367,7 +367,7 @@ export default function LandingPage() {
               Sample output
             </h2>
             <p className="mt-3 text-muted-foreground text-lg">
-              Real examples of what Kappa generates. Every post passes
+              Real examples of what Utsuk generates. Every post passes
               anti-slop validation.
             </p>
             <div className="mt-12 grid gap-6 sm:grid-cols-3">
@@ -424,7 +424,7 @@ export default function LandingPage() {
       <footer className="border-t py-10">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">Kappa</span>
+            <span className="font-semibold text-foreground">Utsuk</span>
             <span>· Made in India</span>
           </div>
           <div className="flex gap-6 text-sm text-muted-foreground">

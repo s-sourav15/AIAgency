@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Kappa — 30 days of on-brand content from one input",
+  title: "Utsuk — 30 days of on-brand content from one input",
   description:
     "Upload a product photo or paste your brand story. Get a full month of platform-ready posts, captions, and ads. Built for Indian D2C brands.",
 };
