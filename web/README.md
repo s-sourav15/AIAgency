@@ -1,6 +1,6 @@
-# Kappa Web
+# Utsuk Web
 
-Frontend for Kappa — an AI content engine for Indian D2C brands. One input, 30 days of on-brand content across Instagram, Twitter, LinkedIn, ads, and email.
+Frontend for Utsuk — an AI content engine for Indian D2C brands. One input, 30 days of on-brand content across Instagram, Twitter, LinkedIn, ads, and email.
 
 ## Stack
 

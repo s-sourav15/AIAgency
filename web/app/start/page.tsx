@@ -129,7 +129,7 @@ export default function StartPage() {
       <header className="border-b">
         <div className="mx-auto flex h-16 max-w-6xl items-center px-4 sm:px-6">
           <Link href="/" className="text-xl font-bold tracking-tight">
-            Kappa
+            Utsuk
           </Link>
         </div>
       </header>
