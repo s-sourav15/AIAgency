@@ -13,7 +13,7 @@ router = APIRouter()
 @router.get("/content/{brand_id}/export")
 async def export_content(
     brand_id: UUID,
-    format: str = Query("json", regex="^(csv|json)$"),
+    format: str = Query("json", pattern="^(csv|json)$"),
     db: AsyncSession = Depends(get_db),
 ):
     if format == "csv":

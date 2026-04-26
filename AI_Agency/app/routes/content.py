@@ -2,7 +2,7 @@ from uuid import UUID
 from collections import defaultdict
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -88,8 +88,12 @@ async def get_pieces(
 
 
 class ContentPieceUpdate(BaseModel):
-    copy: str | None = None
+    # Use alias so the JSON field stays "copy" for the client, but the
+    # Python attribute is "copy_text" — avoids shadowing BaseModel.copy().
+    copy_text: str | None = Field(default=None, alias="copy")
     hashtags: list[str] | None = None
+
+    model_config = {"populate_by_name": True}
 
 
 @router.patch("/content/pieces/{piece_id}")
@@ -103,8 +107,8 @@ async def update_piece(
     if not piece:
         raise HTTPException(status_code=404, detail="Piece not found")
 
-    if update.copy is not None:
-        piece.copy = update.copy
+    if update.copy_text is not None:
+        piece.copy = update.copy_text
         piece.regeneration_count += 1
     if update.hashtags is not None:
         piece.hashtags = update.hashtags
