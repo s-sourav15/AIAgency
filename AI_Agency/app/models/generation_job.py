@@ -22,6 +22,11 @@ class GenerationJob(Base):
     num_days = Column(Integer, default=30)
     calendar = Column(JSON, nullable=True)
     error_message = Column(Text, nullable=True)
+    # Delivery tracking (Block E). Set when the job's deliverable is built.
+    # delivery_type: "zip" (local path) or "drive" (shareable URL).
+    delivery_type = Column(String(20), nullable=True)
+    delivery_url = Column(String(1000), nullable=True)
+    delivered_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
