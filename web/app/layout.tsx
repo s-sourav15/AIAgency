@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,10 +7,16 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "Utsuk — 30 days of on-brand content from one input",
+  title: "Utsuk — Your brand, your voice, running on our backend",
   description:
-    "Upload a product photo or paste your brand story. Get a full month of platform-ready posts, captions, and ads. Built for Indian D2C brands.",
+    "Give us your brand. Get posts, captions, and ads that actually sound like you. Not like ChatGPT. Built for Indian D2C brands.",
 };
 
 export default function RootLayout({
@@ -19,7 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${instrumentSerif.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );

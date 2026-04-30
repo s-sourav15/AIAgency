@@ -1,12 +1,9 @@
 import Link from "next/link";
 import {
-  Upload,
-  CalendarDays,
-  Download,
   ShieldCheck,
   Globe,
-  Sparkles,
-  UserCheck,
+  Layers,
+  Lock,
   Camera,
   Briefcase,
   Hash,
@@ -30,49 +27,76 @@ import { Badge } from "@/components/ui/badge";
 
 const steps = [
   {
-    icon: Upload,
-    title: "Share your brand",
+    number: "01",
+    title: "Tell us about your brand",
     description:
-      "Product photo, a few lines about your brand, or just a blog URL. That's all we need.",
+      "One paragraph about what you sell and who you sell it to. Drop in a few sample posts if you have them. Takes five minutes.",
   },
   {
-    icon: CalendarDays,
-    title: "We generate 30 days of content",
+    number: "02",
+    title: "We study your voice",
     description:
-      "Instagram, Twitter, LinkedIn, ads, email — all in your brand voice, across every platform you care about.",
+      "Our system analyses your tone, vocabulary, and cadence. Every draft gets scored against a slop detector — banned words, AI-sounding phrases, and generic filler get flagged and rewritten before you ever see them.",
   },
   {
-    icon: Download,
-    title: "Approve, edit, or download",
+    number: "03",
+    title: "Get posts you can actually publish",
     description:
-      "Request revisions on any piece, or download as CSV/ZIP — ready for Buffer, Hootsuite, or manual posting.",
+      "Instagram captions, Twitter threads, LinkedIn posts, ad copy, email subject lines — 30 days of content, delivered to your dashboard. Download as CSV, ZIP, or export to Drive.",
   },
 ];
 
 const valueProps = [
   {
     icon: ShieldCheck,
-    title: "Anti-slop validation",
+    title: "Posts that do not read like AI",
     description:
-      'Every post runs through our slop detector before you see it. No "unlock your potential" — just copy that sounds like your brand.',
+      "Every piece runs through our anti-slop validator. If it sounds like ChatGPT wrote it, it gets rewritten. Your audience should never be able to tell.",
   },
   {
     icon: Globe,
-    title: "Indian-first",
+    title: "Built for the way founders actually talk",
     description:
-      "Hinglish-capable, INR pricing, festival-aware calendar (coming soon). Built for the Indian D2C ecosystem.",
+      "We understand the tone and rhythm of brands built here. Hinglish-capable, culturally aware, never tone-deaf. Your voice, not a template.",
   },
   {
-    icon: Sparkles,
-    title: "One input, all platforms",
+    icon: Layers,
+    title: "One input, every surface",
     description:
-      "Instagram, Twitter, LinkedIn, ads, email — from a single product photo or brand brief. No per-platform busywork.",
+      "Instagram, Twitter, LinkedIn, ads, email — all from a single brand brief. No per-platform busywork, no copy-pasting between tools.",
   },
   {
-    icon: UserCheck,
-    title: "Human QA on Pro tier",
+    icon: Lock,
+    title: "You own everything",
     description:
-      "A real editor reviews every piece before delivery. AI drafts, humans polish.",
+      "No watermarks, no attribution requirements, no platform lock-in. Your content is yours. Export it, repurpose it, do whatever you want with it.",
+  },
+];
+
+const samplePosts = [
+  {
+    platform: "Instagram",
+    icon: Camera,
+    brand: "Tanvi Ethnic",
+    content:
+      "Your lehenga should not need a disclaimer. Ours is handwoven, not screen-printed-to-look-handwoven. The difference shows up in how it falls, how it catches light, how it moves with you.",
+    slopScore: "0.91",
+  },
+  {
+    platform: "LinkedIn",
+    icon: Briefcase,
+    brand: "Dermarite Labs",
+    content:
+      "We cold-process everything. Yes, it takes 3x longer. Yes, our margins are thinner. But our retinol actually works at the concentration on the label. That is the whole pitch.",
+    slopScore: "0.87",
+  },
+  {
+    platform: "Twitter",
+    icon: Hash,
+    brand: "Crunchbox Snacks",
+    content:
+      "hot take: if your ingredient list needs a glossary, you are not a clean-label brand. ours has six items. you can pronounce all of them.",
+    slopScore: "0.93",
   },
 ];
 
@@ -81,7 +105,7 @@ const plans = [
     name: "Starter",
     price: "4,999",
     description: "For brands just getting started with content",
-    features: ["1 brand", "30 posts/month", "3 platforms"],
+    features: ["1 brand", "30 posts/month", "3 platforms", "Anti-slop validation"],
     highlighted: false,
   },
   {
@@ -92,7 +116,8 @@ const plans = [
       "1 brand",
       "90 posts/month",
       "All platforms",
-      "Ads + email",
+      "Ads + email copy",
+      "Priority delivery",
     ],
     highlighted: true,
   },
@@ -105,6 +130,7 @@ const plans = [
       "Unlimited posts",
       "All platforms",
       "Human QA review",
+      "Dedicated editor",
     ],
     highlighted: false,
   },
@@ -117,65 +143,42 @@ const plans = [
       "Unlimited posts",
       "White-label",
       "API access",
+      "Custom integrations",
     ],
     highlighted: false,
   },
 ];
 
-const samplePosts = [
-  {
-    platform: "Instagram",
-    icon: Camera,
-    content:
-      "Your morning skincare routine, but make it monsoon-proof. Our new Hydra Shield serum locks in moisture without the greasy feel. Swipe for the full 3-step routine →",
-    hashtags: "#IndianSkincare #MonsoonReady #D2CBrand",
-  },
-  {
-    platform: "LinkedIn",
-    icon: Briefcase,
-    content:
-      "We bootstrapped to ₹50L MRR in 11 months. Here are 3 things we did differently with our D2C content strategy — and what we'd never do again.",
-    hashtags: "#D2CIndia #ContentStrategy #StartupIndia",
-  },
-  {
-    platform: "Twitter",
-    icon: Hash,
-    content:
-      "hot take: most D2C brands don't need more ads. they need 30 days of content that actually sounds like them. we built a tool for that.",
-    hashtags: "#D2C #ContentMarketing",
-  },
-];
-
 const faqs = [
   {
-    question: "How is this different from ChatGPT / Canva AI / Predis?",
+    question: "Is this just another AI content tool?",
     answer:
-      "Those tools give you one post at a time. Utsuk gives you a full 30-day calendar across all platforms, in your brand voice, with anti-slop validation. You get a complete content strategy, not a blank prompt.",
+      "No. Most AI tools give you a blank prompt and wish you luck. We take your brand voice, run every output through an anti-slop validator, and deliver content that sounds like you wrote it on a good day. On Pro, a real human editor reviews everything before it reaches you. The bar is: would you actually post this?",
   },
   {
-    question: "What if I don't like the output?",
+    question: "What if the output is bad?",
     answer:
-      "Request revisions on any piece — no limits on the Pro tier. We iterate until you're happy. If the entire calendar misses the mark, we'll redo it from scratch.",
+      "On Pro, every piece goes through human QA before delivery. On all tiers, you can request revisions — no limits on how many. If the entire calendar misses the vibe, we will redo it from scratch, free. We would rather over-deliver than lose your trust.",
   },
   {
-    question: "Do you support Hinglish / regional languages?",
+    question: "Do you do Hinglish?",
     answer:
-      "Yes — Hinglish is supported out of the box. Regional language support (Tamil, Telugu, Marathi, Bengali) is on our roadmap for Q3 2026.",
+      "Yes. If your brand speaks in Hinglish, the output will too — same pronouns, same phrases, same code-switching patterns. We match how your audience actually talks, not how a textbook says they should.",
   },
   {
-    question: "How do you deliver the content?",
+    question: "How do I actually get the content?",
     answer:
-      "You get a dashboard where you can review, edit, and approve each piece. When you're ready, download as CSV (for Buffer/Hootsuite) or ZIP (with images). Google Drive export is coming soon.",
+      "Everything lands in your dashboard where you can review, edit, and approve each piece. When you are ready, download as CSV (for Buffer or Hootsuite), ZIP with images, or export to Google Drive (coming soon).",
   },
   {
-    question: "Is my brand data secure?",
+    question: "Is my brand data safe?",
     answer:
-      "Yes. We're DPDP-compliant, your data is encrypted at rest and in transit, and we delete everything on request. We never use your brand data to train models.",
+      "DPDP compliant. Encrypted at rest and in transit. Delete on request — we remove everything within 48 hours. We never use your brand data to train models. Your voice stays yours.",
   },
   {
     question: "Can I cancel anytime?",
     answer:
-      "Yes, all plans are month-to-month. Cancel from your dashboard — no calls, no retention flows, no guilt trips.",
+      "Yes. All plans are month-to-month. Cancel from your dashboard — no calls, no retention flows, no guilt trips. If you come back later, your brand profile is still there.",
   },
 ];
 
@@ -185,7 +188,7 @@ export default function LandingPage() {
       {/* Nav */}
       <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="text-xl font-bold tracking-tight">
+          <Link href="/" className="font-serif text-2xl tracking-tight">
             Utsuk
           </Link>
           <nav className="flex items-center gap-4">
@@ -207,18 +210,17 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-32">
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-24 sm:py-36">
           <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
-              30 days of on-brand content.{" "}
-              <span className="text-primary">From one input.</span>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.1]">
+              Your brand, your voice —{" "}
+              <span className="text-primary">running on our backend.</span>
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
-              Upload a product photo or paste your brand story. Get a full month
-              of platform-ready posts, captions, and ads. Built for Indian D2C
-              brands.
+            <p className="mt-8 text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+              Give us your brand. Get posts, captions, and ads that actually
+              sound like you. Not like ChatGPT.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <div className="mt-12 flex flex-col sm:flex-row gap-4">
               <Button
                 render={<Link href="/start" />}
                 size="lg"
@@ -242,32 +244,26 @@ export default function LandingPage() {
         {/* How it works */}
         <section
           id="how-it-works"
-          className="border-t bg-muted/40 py-20 sm:py-28"
+          className="border-t bg-muted/40 py-24 sm:py-32"
         >
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">
               How it works
             </h2>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Three steps. One input. A month of content.
+            <p className="mt-4 text-muted-foreground text-lg max-w-xl">
+              Three steps. Five minutes of your time. A month of content that
+              sounds like you.
             </p>
-            <div className="mt-12 grid gap-8 sm:grid-cols-3">
-              {steps.map((step, i) => (
-                <div key={step.title} className="flex flex-col gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <step.icon className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Step {i + 1}
-                    </p>
-                    <h3 className="mt-1 text-lg font-semibold">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
+            <div className="mt-16 grid gap-12 sm:gap-16 sm:grid-cols-3">
+              {steps.map((step) => (
+                <div key={step.number} className="flex flex-col gap-4">
+                  <span className="font-serif text-5xl text-primary/30">
+                    {step.number}
+                  </span>
+                  <h3 className="text-xl font-semibold">{step.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -275,22 +271,24 @@ export default function LandingPage() {
         </section>
 
         {/* Why Utsuk */}
-        <section className="py-20 sm:py-28">
+        <section className="py-24 sm:py-32">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">Why Utsuk</h2>
-            <p className="mt-3 text-muted-foreground text-lg">
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">
+              Why Utsuk
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-xl">
               Content tools are everywhere. Here&apos;s why this one is
               different.
             </p>
-            <div className="mt-12 grid gap-8 sm:grid-cols-2">
+            <div className="mt-16 grid gap-10 sm:grid-cols-2">
               {valueProps.map((prop) => (
-                <div key={prop.title} className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div key={prop.title} className="flex gap-5">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <prop.icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">{prop.title}</h3>
-                    <p className="mt-1 text-muted-foreground leading-relaxed">
+                    <h3 className="text-lg font-semibold">{prop.title}</h3>
+                    <p className="mt-2 text-muted-foreground leading-relaxed">
                       {prop.description}
                     </p>
                   </div>
@@ -300,14 +298,56 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Pricing */}
-        <section className="border-t bg-muted/40 py-20 sm:py-28">
+        {/* Sample Output */}
+        <section className="border-t bg-muted/40 py-24 sm:py-32">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">Pricing</h2>
-            <p className="mt-3 text-muted-foreground text-lg">
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">
+              Sample output
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-xl">
+              Real examples of what lands in your dashboard. Every post scored
+              against our anti-slop validator.
+            </p>
+            <div className="mt-16 grid gap-8 sm:grid-cols-3">
+              {samplePosts.map((post) => (
+                <Card key={post.brand} className="flex flex-col">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <post.icon className="h-4 w-4 text-primary" />
+                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                          {post.platform}
+                        </CardTitle>
+                      </div>
+                      <Badge variant="secondary" className="text-xs font-mono">
+                        slop score: {post.slopScore}
+                      </Badge>
+                    </div>
+                    <CardDescription className="text-base font-semibold text-foreground mt-2">
+                      {post.brand}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      &ldquo;{post.content}&rdquo;
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section className="py-24 sm:py-32">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">
+              Pricing
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-xl">
               Simple, monthly. Cancel anytime. All prices in INR.
             </p>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {plans.map((plan) => (
                 <Card
                   key={plan.name}
@@ -321,7 +361,7 @@ export default function LandingPage() {
                     <div className="flex items-center gap-2">
                       <CardTitle className="text-lg">{plan.name}</CardTitle>
                       {plan.highlighted && (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="default" className="text-xs">
                           Popular
                         </Badge>
                       )}
@@ -330,16 +370,16 @@ export default function LandingPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-3xl font-bold">
-                      ₹{plan.price}
+                      <span className="font-serif">₹{plan.price}</span>
                       <span className="text-sm font-normal text-muted-foreground">
                         /mo
                       </span>
                     </p>
-                    <ul className="mt-6 space-y-2">
+                    <ul className="mt-6 space-y-2.5">
                       {plan.features.map((f) => (
                         <li
                           key={f}
-                          className="flex items-center gap-2 text-sm text-muted-foreground"
+                          className="flex items-center gap-2.5 text-sm text-muted-foreground"
                         >
                           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                           {f}
@@ -348,7 +388,7 @@ export default function LandingPage() {
                     </ul>
                     <Button
                       render={<Link href="/start" />}
-                      className="mt-6 w-full"
+                      className="mt-8 w-full"
                       variant={plan.highlighted ? "default" : "outline"}
                     >
                       Get started
@@ -360,54 +400,16 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Sample output carousel */}
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">
-              Sample output
-            </h2>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Real examples of what Utsuk generates. Every post passes
-              anti-slop validation.
-            </p>
-            <div className="mt-12 grid gap-6 sm:grid-cols-3">
-              {samplePosts.map((post) => (
-                <Card key={post.platform}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <post.icon className="h-5 w-5 text-primary" />
-                      <CardTitle className="text-base">
-                        {post.platform}
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="aspect-video rounded-md bg-muted mb-4 flex items-center justify-center">
-                      <span className="text-xs text-muted-foreground">
-                        Image placeholder
-                      </span>
-                    </div>
-                    <p className="text-sm leading-relaxed">{post.content}</p>
-                    <p className="mt-3 text-xs text-primary/70">
-                      {post.hashtags}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* FAQ */}
-        <section className="border-t bg-muted/40 py-20 sm:py-28">
+        <section className="border-t bg-muted/40 py-24 sm:py-32">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">
-              Frequently asked questions
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">
+              Questions
             </h2>
-            <Accordion className="mt-8">
+            <Accordion className="mt-10">
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`}>
-                  <AccordionTrigger className="text-left text-base">
+                  <AccordionTrigger className="text-left text-base font-medium">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed">
@@ -418,20 +420,59 @@ export default function LandingPage() {
             </Accordion>
           </div>
         </section>
+
+        {/* Founder Note */}
+        <section className="py-24 sm:py-32">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6">
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">
+              Why this exists
+            </h2>
+            <div className="mt-10 space-y-6 text-lg leading-relaxed text-muted-foreground">
+              <p>
+                Every D2C brand I know either pays 40K a month for mediocre
+                freelance content or burns out doing it themselves. The founder
+                writes posts at midnight, the intern writes posts that sound like
+                an intern, and the agency sends back copy that could belong to
+                any brand in any category.
+              </p>
+              <p>
+                I built Utsuk because there should be a better option. Not just
+                cheaper — actually good. Content that sounds like your brand, not
+                like every other AI tool. We score every piece against a slop
+                detector before you see it. If it reads like a prompt response,
+                it gets rewritten.
+              </p>
+              <p>
+                The goal is simple: you should be able to hand this off and trust
+                what comes back. No babysitting, no extensive editing, no
+                cringing when you read the drafts. Just content you would
+                actually post.
+              </p>
+            </div>
+            <p className="mt-10 font-serif text-lg text-foreground">
+              — Soumya, founder
+            </p>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
       <footer className="border-t py-10">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">Utsuk</span>
-            <span>· Made in India</span>
-          </div>
+          <p className="text-sm text-muted-foreground">
+            Utsuk · Made in India
+          </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">
+            <Link
+              href="/privacy"
+              className="hover:text-foreground transition-colors"
+            >
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">
+            <Link
+              href="/terms"
+              className="hover:text-foreground transition-colors"
+            >
               Terms
             </Link>
           </div>
