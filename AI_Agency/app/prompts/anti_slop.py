@@ -64,6 +64,37 @@ _CHALLENGES_FORMULA = [
     "challenges and opportunities",
 ]
 
+# --- Category G: AI opener clichés (Block B-II) ---
+# These are first-sentence tells that scream LLM. Often caught by the
+# creator prompt but we mirror them here for the runtime detector.
+_AI_OPENERS = [
+    "we've all been there", "we all know the feeling",
+    "what if i told you", "what if we told you",
+    "picture this", "imagine a world",
+    "let's talk about", "let's dive into",
+    "in today's fast-paced world", "in today's digital age",
+    "ever wondered", "ever thought about",
+]
+
+# --- Category H: Generic CTAs (Block B-II) ---
+# Empty-calorie calls to action that any brand could use.
+_GENERIC_CTAS = [
+    "join the movement", "join us on this journey",
+    "break the cycle", "let's start a conversation",
+    "drop a comment below", "sound off in the comments",
+    "stay tuned for more", "hit the follow button",
+    "hit like if you agree", "share your thoughts",
+    "on a mission to", "together we can",
+]
+
+# --- Category I: Hallucination-prone framings (Block B-II) ---
+# Patterns that usually precede an invented statistic.
+_FAKE_STAT_INTROS = [
+    "studies show", "research reveals", "data suggests",
+    "experts agree", "reports indicate", "surveys find",
+    "statistics show", "a staggering",
+]
+
 BANNED_WORDS: list[str] = (
     _CORE_AI_WORDS
     + _SIGNIFICANCE_PUFFERY
@@ -71,6 +102,9 @@ BANNED_WORDS: list[str] = (
     + _NOTABILITY_STUFFING
     + _WEASEL_ATTRIBUTION
     + _CHALLENGES_FORMULA
+    + _AI_OPENERS
+    + _GENERIC_CTAS
+    + _FAKE_STAT_INTROS
 )
 
 # Expose categories for diagnostics / reporting.
@@ -81,6 +115,9 @@ BANNED_WORD_CATEGORIES: dict[str, list[str]] = {
     "notability_stuffing": _NOTABILITY_STUFFING,
     "weasel_attribution": _WEASEL_ATTRIBUTION,
     "challenges_formula": _CHALLENGES_FORMULA,
+    "ai_openers": _AI_OPENERS,
+    "generic_ctas": _GENERIC_CTAS,
+    "fake_stat_intros": _FAKE_STAT_INTROS,
 }
 
 
