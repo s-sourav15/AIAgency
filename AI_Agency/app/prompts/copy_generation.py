@@ -110,6 +110,33 @@ def _banned_words_block(limit: int | None = None) -> str:
 
 # ----- Public prompt builders ------------------------------------------------
 
+def _tone_directive(tone: str) -> str:
+    """Build the top-of-prompt tone directive.
+
+    TONE is the single most important voice signal the founder gives us.
+    It was previously buried mid-prompt as a metadata label, which the
+    LLM weighted lightly and mixed with the voice_block's 10 lines of
+    extracted profile. Now it's promoted to prompt position #2 (right
+    after BRAND) and written as a prescriptive instruction with a
+    concrete fail-state for the LLM to self-check against.
+    """
+    if not tone or not tone.strip():
+        return ""
+    cleaned = tone.strip()
+    return f"""REQUIRED TONE (match EVERY sentence to these words):
+  {cleaned}
+
+  Every sentence you write must plausibly belong in a brand that is
+  these things. Before moving on from a sentence, test it:
+  - If it could be from a Deloitte report, a McKinsey deck, or a
+    corporate wellness blog, rewrite it.
+  - If it sounds like a WhatsApp message from a smart, slightly
+    chaotic friend who deeply cares about the product, you are
+    on track.
+  Tone is NOT decoration. It is the instruction. Other rules below
+  are secondary."""
+
+
 def copy_prompt(
     platform: str,
     day_number: int,
@@ -129,42 +156,51 @@ def copy_prompt(
     ``sample_content`` goes in VERBATIM as few-shot examples. This is the
     single biggest driver of voice fidelity — more impactful than any
     voice_profile extraction.
+
+    ``tone`` is the second-most-important signal and is promoted to
+    top-of-prompt + system prompt. See _tone_directive.
     """
     platform_rules = get_platform_prompt(platform)
     samples_block = _format_samples(sample_content or [])
     banned_words = _banned_words_block()
+    tone_directive = _tone_directive(tone)
 
     brief_block = (brand_description or "").strip()
     if input_summary and input_summary.strip():
         brief_block = f"{brief_block}\n\n--- ADDITIONAL INPUT ---\n{input_summary.strip()}"
 
-    user_msg = f"""BRAND: {brand_name}
+    # System prompt gets an inline tone reminder so the persona itself
+    # inherits the vibe, not just the task layer.
+    if tone_directive:
+        system_msg = (
+            CREATOR_SYSTEM_PROMPT
+            + f"\n\n---\n\nYou are writing for a brand whose tone is: "
+            + f"{tone.strip()}\n\nEverything you produce must embody "
+            + f"that tone in every sentence. It is not a label on the "
+            + f"output; it is the voice of the output."
+        )
+    else:
+        system_msg = CREATOR_SYSTEM_PROMPT
 
-BRAND BRIEF (source of truth — every fact must come from here):
-{brief_block}
-
-BRAND'S ACTUAL EXISTING POSTS (your target voice — write like these):
-{samples_block}
-
-BRAND TONE WORDS: {tone or "(not specified)"}
-BRAND INDUSTRY: {industry or "(not specified)"}
-
-{voice_block}
-
-{platform_rules}
-
-TODAY'S BRIEF:
+    # Build the user message. TONE directive goes right under BRAND —
+    # position #2 in the prompt, before brief, samples, anything else.
+    user_msg_parts = [f"BRAND: {brand_name}"]
+    if tone_directive:
+        user_msg_parts.append(tone_directive)
+    user_msg_parts.extend([
+        f"BRAND BRIEF (source of truth — every fact must come from here):\n{brief_block}",
+        f"BRAND'S ACTUAL EXISTING POSTS (your target voice — write like these):\n{samples_block}",
+        f"INDUSTRY: {industry or '(not specified)'}",
+        voice_block,
+        platform_rules,
+        f"""TODAY'S BRIEF:
 Platform: {platform}
 Content type: {content_type}
 Theme: {theme}
-Angle / hook direction: {hook}
-
-BANNED WORDS (automatic rejection if any appear):
-{banned_words}
-
-{BANNED_STRUCTURAL_PATTERNS}
-
-Write the post. Return JSON:
+Angle / hook direction: {hook}""",
+        f"BANNED WORDS (automatic rejection if any appear):\n{banned_words}",
+        BANNED_STRUCTURAL_PATTERNS,
+        f"""Write the post. Return JSON:
 {{
   "copy": "the full post copy, ready to publish",
   "hashtags": ["lowercase", "no-hash-prefix", "3-10 items"],
@@ -179,10 +215,12 @@ too thin to ground the post in a specific fact, return:
 {{"error": "brief_too_thin", "reason": "what was missing"}}
 
 Do NOT reference day numbers ({day_number}) or series positioning in \
-the output. The reader sees ONE post."""
+the output. The reader sees ONE post.""",
+    ])
+    user_msg = "\n\n".join(user_msg_parts)
 
     return [
-        {"role": "system", "content": CREATOR_SYSTEM_PROMPT},
+        {"role": "system", "content": system_msg},
         {"role": "user", "content": user_msg},
     ]
 
@@ -201,54 +239,48 @@ def regeneration_prompt(
     platform_rules = get_platform_prompt(platform)
     samples_block = _format_samples(sample_content or [])
     banned_words = _banned_words_block()
+    tone_directive = _tone_directive(tone)
 
-    user_msg = f"""BRAND: {brand_name}
-
-BRAND BRIEF:
-{brand_description or "(none provided)"}
-
-BRAND'S ACTUAL EXISTING POSTS (target voice — write like these):
-{samples_block}
-
-BRAND TONE WORDS: {tone or "(not specified)"}
-
-{voice_block}
-
-{platform_rules}
-
-ORIGINAL COPY (rejected):
-{original_copy}
-
-WHY IT WAS REJECTED (fix every one of these):
-{feedback}
-
-BANNED WORDS (re-check — do not use any):
-{banned_words}
-
-{BANNED_STRUCTURAL_PATTERNS}
-
-Rewrite. Return JSON:
-{{
+    parts = [f"BRAND: {brand_name}"]
+    if tone_directive:
+        parts.append(tone_directive)
+    parts.extend([
+        f"BRAND BRIEF:\n{brand_description or '(none provided)'}",
+        f"BRAND'S ACTUAL EXISTING POSTS (target voice — write like these):\n{samples_block}",
+        voice_block,
+        platform_rules,
+        f"ORIGINAL COPY (rejected):\n{original_copy}",
+        f"WHY IT WAS REJECTED (fix every one of these):\n{feedback}",
+        f"BANNED WORDS (re-check — do not use any):\n{banned_words}",
+        BANNED_STRUCTURAL_PATTERNS,
+        """Rewrite. Return JSON:
+{
   "copy": "the rewritten post",
   "hashtags": ["updated", "hashtags"],
   "cta": "the call-to-action",
   "format": "same format as original",
   "hook_used": "what hook or angle you took this time",
   "grounded_facts": ["specific brand fact(s) used"]
-}}
+}
 
 Ground the new post in concrete brand facts from the brief. Match the \
-voice of the example posts above."""
+voice of the example posts above.""",
+    ])
+    user_msg = "\n\n".join(parts)
+
+    system_msg = (
+        "You are rewriting a social media post that failed quality "
+        "review. Fix every specific issue listed. Stay grounded in the "
+        "brand brief. Respond in JSON only."
+    )
+    if tone_directive:
+        system_msg += (
+            f"\n\nThe brand tone is: {tone.strip()}. Every sentence "
+            f"of your rewrite must embody that tone."
+        )
 
     return [
-        {
-            "role": "system",
-            "content": (
-                "You are rewriting a social media post that failed "
-                "quality review. Fix every specific issue listed. "
-                "Stay grounded in the brand brief. Respond in JSON only."
-            ),
-        },
+        {"role": "system", "content": system_msg},
         {"role": "user", "content": user_msg},
     ]
 
