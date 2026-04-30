@@ -60,8 +60,15 @@ async def validate_job(
         async def validate_one(piece_id: UUID):
             async with semaphore:
                 await _validate_and_regen(
-                    piece_id, brand_name, voice_profile,
-                    session_factory, llm, settings,
+                    piece_id=piece_id,
+                    brand_name=brand_name,
+                    voice_profile=voice_profile,
+                    brand_description=brand_description,
+                    brand_sample_content=brand_sample_content,
+                    brand_tone=brand_tone,
+                    session_factory=session_factory,
+                    llm=llm,
+                    settings=settings,
                 )
 
         tasks = [validate_one(p.id) for p in pieces]
@@ -76,6 +83,9 @@ async def _validate_and_regen(
     piece_id: UUID,
     brand_name: str,
     voice_profile: dict,
+    brand_description: str,
+    brand_sample_content: list,
+    brand_tone: str,
     session_factory: async_sessionmaker,
     llm,
     settings: Settings,
