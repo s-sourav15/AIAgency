@@ -35,7 +35,10 @@ class Settings(BaseSettings):
 
     # Google Gemini
     gemini_api_key: str = ""
-    gemini_model_creator: str = "gemini-2.5-pro"
+    # Flash by default: Pro's thinking mode makes it unreliable for
+    # structured JSON output in our short-form copy task, and Flash is
+    # ~4x cheaper. See fix/gemini-thinking-mode PR.
+    gemini_model_creator: str = "gemini-2.5-flash"
     gemini_model_validator: str = "gemini-2.5-flash"
 
     # LLM provider routing.
