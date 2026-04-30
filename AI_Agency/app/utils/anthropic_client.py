@@ -76,6 +76,21 @@ class AnthropicClient:
                     logger.warning(f"Claude overloaded, waiting {wait}s...")
                     await asyncio.sleep(wait)
                     continue
+                if resp.status_code >= 400:
+                    # Surface the actual API error body — otherwise httpx's
+                    # HTTPStatusError only says "400 Bad Request" with no
+                    # hint why. Anthropic returns structured errors like
+                    # {"error": {"type": "invalid_request_error",
+                    #            "message": "max_tokens: ..."}}
+                    try:
+                        body = resp.json()
+                    except Exception:
+                        body = resp.text[:500]
+                    logger.error(
+                        "Claude API %d on %s (model=%s): %s",
+                        resp.status_code, self.BASE_URL,
+                        payload.get("model"), body,
+                    )
                 resp.raise_for_status()
                 data = resp.json()
                 return data["content"][0]["text"]
