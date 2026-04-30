@@ -73,3 +73,10 @@ app.include_router(export.router, prefix="/api", tags=["export"])
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/ready")
+async def ready():
+    async with database.engine.connect() as conn:
+        await conn.execute(text("SELECT 1"))
+    return {"status": "ok"}
