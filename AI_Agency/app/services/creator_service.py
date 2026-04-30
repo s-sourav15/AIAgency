@@ -95,6 +95,72 @@ async def _strategy_step(
 
         calendar = result.get("days", [])
 
+        # Defensive: if LLM returns empty/broken calendar, fail the job
+        # LOUDLY rather than silently producing zero pieces downstream.
+        if not calendar:
+            job.status = "failed"
+            job.error_message = (
+                f"Strategy step returned empty calendar. "
+                f"Raw response keys: {list(result.keys()) if isinstance(result, dict) else type(result).__name__}"
+            )
+            await db.commit()
+            logger.error(
+                "Job %s: strategy returned empty calendar; raw=%s",
+                job_id, str(result)[:500],
+            )
+            raise RuntimeError(job.error_message)
+
+        # Coerce each day's `platforms` field to a list of strings.
+        # LLMs (especially Gemini in "helpful" mode) return this field in
+        # at least three shapes:
+        #   1. ["instagram", "twitter"]                          ← what we want
+        #   2. [{"platform": "instagram", "post_copy": "..."}]   ← array of objects
+        #   3. {"instagram": {"post_type": "...", ...}, ...}     ← dict keyed by platform
+        # Downstream code iterates platforms as strings, so we normalize all
+        # three shapes here.
+        for day in calendar:
+            raw_platforms = day.get("platforms")
+
+            # Shape 3: dict keyed by platform name.
+            if isinstance(raw_platforms, dict):
+                coerced = [
+                    name.lower().strip()
+                    for name in raw_platforms.keys()
+                    if isinstance(name, str) and name
+                ]
+                if coerced:
+                    logger.warning(
+                        "Job %s day %s: coerced dict-keyed platforms → strings: %s",
+                        job_id, day.get("day"), coerced,
+                    )
+                day["platforms"] = coerced
+                continue
+
+            # Shape 2: list of objects.
+            if isinstance(raw_platforms, list) and raw_platforms and isinstance(raw_platforms[0], dict):
+                coerced = []
+                for p in raw_platforms:
+                    name = p.get("platform") or p.get("name")
+                    if isinstance(name, str) and name:
+                        coerced.append(name.lower().strip())
+                if coerced:
+                    logger.warning(
+                        "Job %s day %s: coerced list-of-dicts platforms → strings: %s",
+                        job_id, day.get("day"), coerced,
+                    )
+                day["platforms"] = coerced
+                continue
+
+            # Shape 1 (good) or unexpected types.
+            if isinstance(raw_platforms, list) and raw_platforms and not isinstance(raw_platforms[0], str):
+                logger.warning(
+                    "Job %s day %s: unexpected platforms element type %s; dropping day",
+                    job_id, day.get("day"), type(raw_platforms[0]).__name__,
+                )
+                day["platforms"] = []
+            elif raw_platforms is None:
+                day["platforms"] = []
+
         # Enforce num_days limit — LLM sometimes generates more
         num_days = job.num_days or 30
         if len(calendar) > num_days:

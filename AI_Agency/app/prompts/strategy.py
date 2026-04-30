@@ -66,7 +66,23 @@ CONFIGURED PLATFORMS: {platforms_str}
 
 PLATFORM COVERAGE: {platform_rule}
 
-Return JSON:
+IMPORTANT: At this stage, you are ONLY planning. Do NOT write the
+actual post copy — that happens in a separate step. Each day's
+"platforms" field must be a simple array of STRINGS like ["instagram",
+"twitter"], NOT an array of objects and NOT a dict keyed by platform
+name. Do not include post_copy, post_type, content, creative_suggestion,
+captions, hashtags, cta, or any per-post details. That is a different
+prompt's job.
+
+WRONG (do not do any of these):
+  "platforms": [{{"platform": "instagram", "post_copy": "..."}}]
+  "platforms": {{"instagram": {{"post_type": "Reel", "content": "..."}}}}
+  "platforms": [{{"name": "instagram", "content": "..."}}]
+
+RIGHT:
+  "platforms": ["instagram", "twitter", "linkedin"]
+
+Return JSON in exactly this schema (no extra fields):
 {{
   "days": [
     {{
@@ -74,7 +90,7 @@ Return JSON:
       "theme": "short theme description (3-8 words)",
       "hook": "the specific angle or hook for this day's content (one sentence)",
       "content_type": "educational / promotional / engagement / behind-the-scenes / user-story / trend",
-      "platforms": ["instagram", "twitter", ...]
+      "platforms": ["instagram", "twitter"]
     }}
   ]
 }}
@@ -88,6 +104,7 @@ RULES:
   Bangalore beta" is specific.
 - EXACTLY {num_days} days total. The "days" array MUST have exactly
   {num_days} entries, numbered 1 to {num_days}. Do NOT generate more
-  or fewer days.""",
+  or fewer days.
+- platforms is a JSON array of STRING platform names. Not objects.""",
         },
     ]
