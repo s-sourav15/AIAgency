@@ -121,6 +121,10 @@ async def _copy_step(
         job = await db.get(GenerationJob, job_id)
         brand = await db.get(Brand, job.brand_id)
         brand_name = brand.name
+        brand_description = brand.description or ""
+        brand_sample_content = list(brand.sample_content or [])
+        brand_tone = brand.tone or ""
+        brand_industry = brand.industry or ""
         voice_block = voice_injection_block(brand.name, brand.voice_profile)
         input_summary = (job.input_data or "")[:500]
         brand_id = brand.id
@@ -138,6 +142,10 @@ async def _copy_step(
                 content_type=day_plan.get("content_type", "educational"),
                 voice_block=voice_block,
                 brand_name=brand_name,
+                brand_description=brand_description,
+                sample_content=brand_sample_content,
+                tone=brand_tone,
+                industry=brand_industry,
                 input_summary=input_summary,
             )
             try:
@@ -147,12 +155,24 @@ async def _copy_step(
                     temperature=0.8,
                     max_tokens=1024,
                 )
+                # New: LLM can reject a piece if the brief is too thin
+                # to ground content in specific facts. Log + skip rather
+                # than let it hallucinate.
+                if isinstance(result, dict) and result.get("error") == "brief_too_thin":
+                    logger.warning(
+                        "Day %s/%s: LLM flagged brief_too_thin: %s",
+                        day_plan.get("day"), platform,
+                        result.get("reason", "(no reason given)"),
+                    )
+                    return None
                 return {
                     "day": int(day_plan.get("day", 0)),
                     "platform": platform,
                     "copy": result.get("copy", ""),
                     "hashtags": result.get("hashtags", []),
                     "format": result.get("format", "caption"),
+                    "grounded_facts": result.get("grounded_facts", []),
+                    "hook_used": result.get("hook_used", ""),
                 }
             except Exception as e:
                 logger.error(f"Copy gen failed for day {day_plan.get('day')}/{platform}: {e}")

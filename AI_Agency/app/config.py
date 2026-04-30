@@ -32,7 +32,20 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     claude_model_creator: str = "claude-sonnet-4-5-20250929"
     claude_model_validator: str = "claude-haiku-4-5-20251001"
-    llm_provider: str = "claude"  # "claude" or "groq"
+
+    # Google Gemini
+    gemini_api_key: str = ""
+    gemini_model_creator: str = "gemini-2.5-pro"
+    gemini_model_validator: str = "gemini-2.5-flash"
+
+    # LLM provider routing.
+    # Legacy: ``llm_provider`` is a single fallback for both roles.
+    # Preferred (Block B-II): per-role providers so creator and
+    # validator run on different model families (avoids validator-
+    # collusion bias).
+    llm_provider: str = "claude"
+    creator_provider: str = "gemini"       # default: Gemini 2.5 Pro
+    validator_provider: str = "claude"     # default: Claude Haiku 4.5
 
     # OpenAI (for vision/style extraction)
     openai_api_key: str = ""

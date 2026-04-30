@@ -51,6 +51,9 @@ async def validate_job(
             brand = await db.get(Brand, pieces[0].brand_id)
             voice_profile = brand.voice_profile or {}
             brand_name = brand.name
+            brand_description = brand.description or ""
+            brand_sample_content = list(brand.sample_content or [])
+            brand_tone = brand.tone or ""
 
         semaphore = asyncio.Semaphore(settings.max_concurrent_llm_calls)
 
@@ -158,6 +161,9 @@ async def _validate_and_regen(
                     feedback=feedback_str,
                     voice_block=voice_block,
                     brand_name=brand_name,
+                    brand_description=brand_description,
+                    sample_content=brand_sample_content,
+                    tone=brand_tone,
                 )
                 try:
                     regen_result = await llm.chat_json(
