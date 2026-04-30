@@ -3,8 +3,25 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Database — defaults to local SQLite (no external DB needed)
-    # Set DATABASE_URL in .env to use PostgreSQL instead
-    database_url: str = "sqlite+aiosqlite:///./content_engine.db"
+    # Set DATABASE_URL in .env to use PostgreSQL, or set individual DB_* vars.
+    database_url: str = ""
+
+    db_user: str = ""
+    db_password: str = ""
+    db_host: str = ""
+    db_port: str = "5432"
+    db_name: str = ""
+
+    @property
+    def effective_database_url(self) -> str:
+        if self.database_url:
+            return self.database_url
+        if self.db_host and self.db_user:
+            return (
+                f"postgresql+asyncpg://{self.db_user}:{self.db_password}"
+                f"@{self.db_host}:{self.db_port}/{self.db_name}"
+            )
+        return "sqlite+aiosqlite:///./content_engine.db"
 
     # Groq LLM
     groq_api_key: str = ""

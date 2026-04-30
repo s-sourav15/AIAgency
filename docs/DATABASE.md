@@ -30,6 +30,10 @@ cd AI_Agency
 DATABASE_URL="..." alembic revision --autogenerate -m "describe the change"
 ```
 
+## Deployment
+
+For the full ECS Fargate deployment guide (build, push, deploy, logs, shell access), see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
 ## Production (AWS RDS)
 
 The production PostgreSQL instance runs on AWS RDS in ap-south-1.

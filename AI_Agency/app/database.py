@@ -11,7 +11,8 @@ async_session_factory = None
 def init_db(settings: Settings):
     global engine, async_session_factory
 
-    is_sqlite = settings.database_url.startswith("sqlite")
+    url = settings.effective_database_url
+    is_sqlite = url.startswith("sqlite")
     use_pgbouncer = os.getenv("PGBOUNCER", "").lower() in ("1", "true", "yes")
 
     kwargs = {"echo": False}
@@ -30,7 +31,7 @@ def init_db(settings: Settings):
             kwargs["pool_pre_ping"] = True
             kwargs["pool_recycle"] = 300
 
-    engine = create_async_engine(settings.database_url, **kwargs)
+    engine = create_async_engine(url, **kwargs)
     async_session_factory = async_sessionmaker(
         engine, class_=AsyncSession, expire_on_commit=False
     )
