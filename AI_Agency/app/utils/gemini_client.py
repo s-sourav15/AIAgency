@@ -85,6 +85,18 @@ class GeminiClient:
         if json_mode:
             generation_config["responseMimeType"] = "application/json"
 
+        # Gemini 2.5 Pro has "thinking" mode on by default, which burns
+        # the maxOutputTokens budget on internal reasoning and leaves
+        # zero tokens for the actual response. Observed in Pluto test:
+        # all 9 copy-gen calls returned empty content with
+        # finishReason=MAX_TOKENS.
+        #
+        # We don't need chain-of-thought for short-form copy generation,
+        # so we explicitly set thinkingBudget=0 on Pro. Other models
+        # ignore this field.
+        if "2.5-pro" in model or "2.5-flash" in model:
+            generation_config["thinkingConfig"] = {"thinkingBudget": 0}
+
         payload: dict = {
             "contents": contents,
             "generationConfig": generation_config,
@@ -130,9 +142,21 @@ class GeminiClient:
                             f"Gemini blocked response: {block_reason}"
                         )
                     raise RuntimeError(f"Gemini returned no candidates: {data}")
-                parts = candidates[0].get("content", {}).get("parts", [])
+                candidate = candidates[0]
+                parts = candidate.get("content", {}).get("parts", [])
                 if not parts:
-                    raise RuntimeError(f"Gemini returned no parts: {candidates[0]}")
+                    finish_reason = candidate.get("finishReason", "UNKNOWN")
+                    if finish_reason == "MAX_TOKENS":
+                        raise RuntimeError(
+                            f"Gemini hit MAX_TOKENS with empty output "
+                            f"(model={model}, max_tokens={max_tokens}). "
+                            f"This usually means Pro's thinking mode "
+                            f"consumed the token budget. Increase "
+                            f"max_tokens or disable thinking."
+                        )
+                    raise RuntimeError(
+                        f"Gemini returned no parts (finishReason={finish_reason}): {candidate}"
+                    )
                 return parts[0].get("text", "")
             except httpx.HTTPStatusError as e:
                 if attempt == 2:
