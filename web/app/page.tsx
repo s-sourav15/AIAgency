@@ -1,441 +1,133 @@
-import Link from "next/link";
-import {
-  Upload,
-  CalendarDays,
-  Download,
-  ShieldCheck,
-  Globe,
-  Sparkles,
-  UserCheck,
-  Camera,
-  Briefcase,
-  Hash,
-  ChevronRight,
-} from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod/v4";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
-const steps = [
-  {
-    icon: Upload,
-    title: "Share your brand",
-    description:
-      "Product photo, a few lines about your brand, or just a blog URL. That's all we need.",
-  },
-  {
-    icon: CalendarDays,
-    title: "We generate 30 days of content",
-    description:
-      "Instagram, Twitter, LinkedIn, ads, email — all in your brand voice, across every platform you care about.",
-  },
-  {
-    icon: Download,
-    title: "Approve, edit, or download",
-    description:
-      "Request revisions on any piece, or download as CSV/ZIP — ready for Buffer, Hootsuite, or manual posting.",
-  },
-];
+const schema = z.object({
+  brief: z.string().min(50, "Please provide at least 50 characters about your brand."),
+  brandName: z.union([z.string().min(2, "Brand name must be at least 2 characters."), z.literal("")]),
+  email: z.union([z.email("Please enter a valid email address."), z.literal("")]),
+});
 
-const valueProps = [
-  {
-    icon: ShieldCheck,
-    title: "Anti-slop validation",
-    description:
-      'Every post runs through our slop detector before you see it. No "unlock your potential" — just copy that sounds like your brand.',
-  },
-  {
-    icon: Globe,
-    title: "Indian-first",
-    description:
-      "Hinglish-capable, INR pricing, festival-aware calendar (coming soon). Built for the Indian D2C ecosystem.",
-  },
-  {
-    icon: Sparkles,
-    title: "One input, all platforms",
-    description:
-      "Instagram, Twitter, LinkedIn, ads, email — from a single product photo or brand brief. No per-platform busywork.",
-  },
-  {
-    icon: UserCheck,
-    title: "Human QA on Pro tier",
-    description:
-      "A real editor reviews every piece before delivery. AI drafts, humans polish.",
-  },
-];
+type FormData = z.infer<typeof schema>;
 
-const plans = [
-  {
-    name: "Starter",
-    price: "4,999",
-    description: "For brands just getting started with content",
-    features: ["1 brand", "30 posts/month", "3 platforms"],
-    highlighted: false,
-  },
-  {
-    name: "Growth",
-    price: "14,999",
-    description: "For brands ready to scale across every channel",
-    features: [
-      "1 brand",
-      "90 posts/month",
-      "All platforms",
-      "Ads + email",
-    ],
-    highlighted: true,
-  },
-  {
-    name: "Pro",
-    price: "29,999",
-    description: "For brands that want human-reviewed quality",
-    features: [
-      "1 brand",
-      "Unlimited posts",
-      "All platforms",
-      "Human QA review",
-    ],
-    highlighted: false,
-  },
-  {
-    name: "Agency",
-    price: "49,999",
-    description: "For agencies managing multiple brands",
-    features: [
-      "Up to 10 brands",
-      "Unlimited posts",
-      "White-label",
-      "API access",
-    ],
-    highlighted: false,
-  },
-];
+export default function Home() {
+  const [submitted, setSubmitted] = useState(false);
+  const [submittedBrand, setSubmittedBrand] = useState("");
 
-const samplePosts = [
-  {
-    platform: "Instagram",
-    icon: Camera,
-    content:
-      "Your morning skincare routine, but make it monsoon-proof. Our new Hydra Shield serum locks in moisture without the greasy feel. Swipe for the full 3-step routine →",
-    hashtags: "#IndianSkincare #MonsoonReady #D2CBrand",
-  },
-  {
-    platform: "LinkedIn",
-    icon: Briefcase,
-    content:
-      "We bootstrapped to ₹50L MRR in 11 months. Here are 3 things we did differently with our D2C content strategy — and what we'd never do again.",
-    hashtags: "#D2CIndia #ContentStrategy #StartupIndia",
-  },
-  {
-    platform: "Twitter",
-    icon: Hash,
-    content:
-      "hot take: most D2C brands don't need more ads. they need 30 days of content that actually sounds like them. we built a tool for that.",
-    hashtags: "#D2C #ContentMarketing",
-  },
-];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { brief: "", brandName: "", email: "" },
+  });
 
-const faqs = [
-  {
-    question: "How is this different from ChatGPT / Canva AI / Predis?",
-    answer:
-      "Those tools give you one post at a time. Utsuk gives you a full 30-day calendar across all platforms, in your brand voice, with anti-slop validation. You get a complete content strategy, not a blank prompt.",
-  },
-  {
-    question: "What if I don't like the output?",
-    answer:
-      "Request revisions on any piece — no limits on the Pro tier. We iterate until you're happy. If the entire calendar misses the mark, we'll redo it from scratch.",
-  },
-  {
-    question: "Do you support Hinglish / regional languages?",
-    answer:
-      "Yes — Hinglish is supported out of the box. Regional language support (Tamil, Telugu, Marathi, Bengali) is on our roadmap for Q3 2026.",
-  },
-  {
-    question: "How do you deliver the content?",
-    answer:
-      "You get a dashboard where you can review, edit, and approve each piece. When you're ready, download as CSV (for Buffer/Hootsuite) or ZIP (with images). Google Drive export is coming soon.",
-  },
-  {
-    question: "Is my brand data secure?",
-    answer:
-      "Yes. We're DPDP-compliant, your data is encrypted at rest and in transit, and we delete everything on request. We never use your brand data to train models.",
-  },
-  {
-    question: "Can I cancel anytime?",
-    answer:
-      "Yes, all plans are month-to-month. Cancel from your dashboard — no calls, no retention flows, no guilt trips.",
-  },
-];
+  async function onSubmit(data: FormData) {
+    const payload = {
+      brief: data.brief,
+      brandName: data.brandName || undefined,
+      email: data.email || undefined,
+    };
 
-export default function LandingPage() {
+    // TODO: replace with real POST to /api/intake once backend is live
+    // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/intake`, { method: "POST", body: JSON.stringify(payload) })
+    console.log("Intake payload:", payload);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    setSubmittedBrand(data.brandName || "your brand");
+    setSubmitted(true);
+  }
+
   return (
-    <div className="flex flex-col min-h-full">
-      {/* Nav */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="text-xl font-bold tracking-tight">
-            Utsuk
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/start"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Get started
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Dashboard
-            </Link>
-          </nav>
-        </div>
+    <div className="flex min-h-dvh flex-col px-5 py-6" style={{ backgroundColor: "#faf9f5" }}>
+      <header>
+        <span className="font-mono text-sm text-[#1a1a1a]/40">LOGO</span>
       </header>
 
-      <main className="flex-1">
-        {/* Hero */}
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-32">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
-              30 days of on-brand content.{" "}
-              <span className="text-primary">From one input.</span>
-            </h1>
-            <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
-              Upload a product photo or paste your brand story. Get a full month
-              of platform-ready posts, captions, and ads. Built for Indian D2C
-              brands.
+      <main className="mx-auto flex w-full max-w-[640px] flex-1 flex-col items-center justify-center py-12">
+        {submitted ? (
+          <div className="w-full rounded-xl border border-[#1a1a1a]/10 bg-white p-8 text-center shadow-sm">
+            <h2 className="text-xl font-medium text-[#1a1a1a]">Got it.</h2>
+            <p className="mt-3 text-[#1a1a1a]/70">
+              We are generating content for <span className="font-medium text-[#1a1a1a]">{submittedBrand}</span>.
+              You&apos;ll receive the full calendar via email within 24 hours.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+            <div className="space-y-2 text-center">
+              <h1 className="text-2xl font-medium text-[#1a1a1a]">Tell us about your brand.</h1>
+              <p className="text-sm text-[#1a1a1a]/60">
+                Paste a brand brief, product description, or a few sample posts. We will generate a
+                month&apos;s worth of on-brand content across platforms.
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <Textarea
+                {...register("brief")}
+                rows={12}
+                placeholder="Your brand story, product description, or a few sample posts..."
+                className="min-h-[288px] resize-none border-[#1a1a1a]/15 bg-white text-[#1a1a1a] shadow-none transition-shadow placeholder:text-[#1a1a1a]/35 focus-visible:border-[#c4572b]/50 focus-visible:shadow-[0_0_0_3px_rgba(196,87,43,0.08)] focus-visible:ring-0"
+              />
+              {errors.brief && (
+                <p className="text-xs text-red-600">{errors.brief.message}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Input
+                  {...register("brandName")}
+                  placeholder="Brand name (optional)"
+                  className="border-[#1a1a1a]/15 bg-white text-[#1a1a1a] placeholder:text-[#1a1a1a]/35 focus-visible:border-[#c4572b]/50 focus-visible:shadow-[0_0_0_3px_rgba(196,87,43,0.08)] focus-visible:ring-0"
+                />
+                {errors.brandName && (
+                  <p className="text-xs text-red-600">{errors.brandName.message}</p>
+                )}
+              </div>
+              <div className="space-y-1.5">
+                <Input
+                  {...register("email")}
+                  type="email"
+                  placeholder="Contact email (optional)"
+                  className="border-[#1a1a1a]/15 bg-white text-[#1a1a1a] placeholder:text-[#1a1a1a]/35 focus-visible:border-[#c4572b]/50 focus-visible:shadow-[0_0_0_3px_rgba(196,87,43,0.08)] focus-visible:ring-0"
+                />
+                {errors.email && (
+                  <p className="text-xs text-red-600">{errors.email.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-3">
               <Button
-                render={<Link href="/start" />}
-                size="lg"
-                className="text-base px-8"
+                type="submit"
+                disabled={isSubmitting}
+                className="h-10 cursor-pointer gap-2 rounded-lg bg-[#c4572b] px-5 text-sm font-medium text-white hover:bg-[#a84824] disabled:opacity-60"
               >
-                Start free sample
-                <ChevronRight className="ml-1 h-4 w-4" />
+                {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+                Generate a month of content
               </Button>
-              <Button
-                render={<a href="#how-it-works" />}
-                variant="outline"
-                size="lg"
-                className="text-base"
-              >
-                See how it works
-              </Button>
+              <p className="text-xs text-[#1a1a1a]/40">
+                Free sample. No signup required. We will email the output within 24 hours.
+              </p>
             </div>
-          </div>
-        </section>
-
-        {/* How it works */}
-        <section
-          id="how-it-works"
-          className="border-t bg-muted/40 py-20 sm:py-28"
-        >
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">
-              How it works
-            </h2>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Three steps. One input. A month of content.
-            </p>
-            <div className="mt-12 grid gap-8 sm:grid-cols-3">
-              {steps.map((step, i) => (
-                <div key={step.title} className="flex flex-col gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <step.icon className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Step {i + 1}
-                    </p>
-                    <h3 className="mt-1 text-lg font-semibold">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Why Utsuk */}
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">Why Utsuk</h2>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Content tools are everywhere. Here&apos;s why this one is
-              different.
-            </p>
-            <div className="mt-12 grid gap-8 sm:grid-cols-2">
-              {valueProps.map((prop) => (
-                <div key={prop.title} className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <prop.icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{prop.title}</h3>
-                    <p className="mt-1 text-muted-foreground leading-relaxed">
-                      {prop.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Pricing */}
-        <section className="border-t bg-muted/40 py-20 sm:py-28">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">Pricing</h2>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Simple, monthly. Cancel anytime. All prices in INR.
-            </p>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {plans.map((plan) => (
-                <Card
-                  key={plan.name}
-                  className={
-                    plan.highlighted
-                      ? "border-primary shadow-md ring-1 ring-primary/20"
-                      : ""
-                  }
-                >
-                  <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <CardTitle className="text-lg">{plan.name}</CardTitle>
-                      {plan.highlighted && (
-                        <Badge variant="secondary" className="text-xs">
-                          Popular
-                        </Badge>
-                      )}
-                    </div>
-                    <CardDescription>{plan.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-3xl font-bold">
-                      ₹{plan.price}
-                      <span className="text-sm font-normal text-muted-foreground">
-                        /mo
-                      </span>
-                    </p>
-                    <ul className="mt-6 space-y-2">
-                      {plan.features.map((f) => (
-                        <li
-                          key={f}
-                          className="flex items-center gap-2 text-sm text-muted-foreground"
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      render={<Link href="/start" />}
-                      className="mt-6 w-full"
-                      variant={plan.highlighted ? "default" : "outline"}
-                    >
-                      Get started
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Sample output carousel */}
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">
-              Sample output
-            </h2>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Real examples of what Utsuk generates. Every post passes
-              anti-slop validation.
-            </p>
-            <div className="mt-12 grid gap-6 sm:grid-cols-3">
-              {samplePosts.map((post) => (
-                <Card key={post.platform}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <post.icon className="h-5 w-5 text-primary" />
-                      <CardTitle className="text-base">
-                        {post.platform}
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="aspect-video rounded-md bg-muted mb-4 flex items-center justify-center">
-                      <span className="text-xs text-muted-foreground">
-                        Image placeholder
-                      </span>
-                    </div>
-                    <p className="text-sm leading-relaxed">{post.content}</p>
-                    <p className="mt-3 text-xs text-primary/70">
-                      {post.hashtags}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="border-t bg-muted/40 py-20 sm:py-28">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight">
-              Frequently asked questions
-            </h2>
-            <Accordion className="mt-8">
-              {faqs.map((faq, i) => (
-                <AccordionItem key={i} value={`faq-${i}`}>
-                  <AccordionTrigger className="text-left text-base">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground leading-relaxed">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </section>
+          </form>
+        )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t py-10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">Utsuk</span>
-            <span>· Made in India</span>
-          </div>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">
-              Terms
-            </Link>
-          </div>
-        </div>
+      <footer className="pb-4 text-center text-xs text-[#1a1a1a]/35">
+        Made in India &middot;{" "}
+        <a href="/privacy" className="underline-offset-2 hover:text-[#c4572b] hover:underline">Privacy</a> &middot;{" "}
+        <a href="/terms" className="underline-offset-2 hover:text-[#c4572b] hover:underline">Terms</a>
       </footer>
     </div>
   );

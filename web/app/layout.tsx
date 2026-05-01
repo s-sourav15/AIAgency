@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Utsuk — 30 days of on-brand content from one input",
+  title: "Utsuk — On-brand content for D2C brands",
   description:
-    "Upload a product photo or paste your brand story. Get a full month of platform-ready posts, captions, and ads. Built for Indian D2C brands.",
+    "Give us your brand. Get a months worth of on-brand social media content. Built for Indian D2C brands.",
 };
 
 export default function RootLayout({
