@@ -102,6 +102,8 @@ export default function StickerPackPage() {
     register: fastRegister,
     handleSubmit: fastHandleSubmit,
     formState: { errors: fastErrors, isSubmitting: fastIsSubmitting },
+    getValues: fastGetValues,
+    reset: fastReset,
   } = useForm<FastForm>({
     resolver: zodResolver(fastSchema),
     defaultValues: { brand_blob: "", brand_name: "", email: "" },
@@ -115,6 +117,8 @@ export default function StickerPackPage() {
     watch,
     setValue,
     trigger,
+    getValues: fullGetValues,
+    reset: fullReset,
   } = useForm<FullForm>({
     defaultValues: {
       brand_name: "",
@@ -169,6 +173,27 @@ export default function StickerPackPage() {
   };
 
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
+
+  const switchToFull = () => {
+    const fast = fastGetValues();
+    fullReset({
+      ...fullGetValues(),
+      brand_name: fast.brand_name || fullGetValues().brand_name,
+      email: fast.email || fullGetValues().email,
+      brand_description: fast.brand_blob || fullGetValues().brand_description,
+    });
+    setMode("full");
+  };
+
+  const switchToFast = () => {
+    const full = fullGetValues();
+    fastReset({
+      brand_name: full.brand_name || fastGetValues().brand_name,
+      email: full.email || fastGetValues().email,
+      brand_blob: full.brand_description || fastGetValues().brand_blob,
+    });
+    setMode("fast");
+  };
 
   const toggleTone = (t: string) => {
     const current = watch("tone") || [];
@@ -355,7 +380,7 @@ export default function StickerPackPage() {
 
           <div className="flex flex-col md:flex-row gap-8 md:gap-6 items-center md:items-start justify-center">
             <div className="relative bg-[#fef3c7] p-8 rounded-xl shadow-md rotate-1 max-w-xs w-full">
-              <span className="text-sm font-bold text-[#8b5cf6] uppercase tracking-wide">
+              <span className="text-base font-bold text-[#8b5cf6] uppercase tracking-wide">
                 Step 1
               </span>
               <p
@@ -365,7 +390,7 @@ export default function StickerPackPage() {
                 Tell us about your brand
               </p>
               <span
-                className="absolute -top-4 -right-6 text-lg text-[#ff6b6b] -rotate-12"
+                className="absolute -top-4 -right-6 text-xl text-[#ff6b6b] -rotate-12"
                 style={{ fontFamily: "var(--font-handwriting)" }}
               >
                 &larr; 30 sec
@@ -373,7 +398,7 @@ export default function StickerPackPage() {
             </div>
 
             <div className="relative bg-[#dbeafe] p-8 rounded-xl shadow-md -rotate-2 max-w-xs w-full">
-              <span className="text-sm font-bold text-[#ff6b6b] uppercase tracking-wide">
+              <span className="text-base font-bold text-[#ff6b6b] uppercase tracking-wide">
                 Step 2
               </span>
               <p
@@ -383,7 +408,7 @@ export default function StickerPackPage() {
                 Show us your voice &amp; tone
               </p>
               <span
-                className="absolute -bottom-5 -left-4 text-lg text-[#8b5cf6] rotate-6"
+                className="absolute -bottom-5 -left-4 text-xl text-[#8b5cf6] rotate-6"
                 style={{ fontFamily: "var(--font-handwriting)" }}
               >
                 magic happens here
@@ -391,7 +416,7 @@ export default function StickerPackPage() {
             </div>
 
             <div className="relative bg-[#d1fae5] p-8 rounded-xl shadow-md rotate-1 max-w-xs w-full">
-              <span className="text-sm font-bold text-[#34d399] uppercase tracking-wide">
+              <span className="text-base font-bold text-[#34d399] uppercase tracking-wide">
                 Step 3
               </span>
               <p
@@ -401,7 +426,7 @@ export default function StickerPackPage() {
                 We generate a month of content
               </p>
               <span
-                className="absolute -top-4 right-2 text-lg text-[#fde047] -rotate-3"
+                className="absolute -top-4 right-2 text-xl text-[#fde047] -rotate-3"
                 style={{ fontFamily: "var(--font-handwriting)" }}
               >
                 no fluff &darr;
@@ -440,7 +465,7 @@ export default function StickerPackPage() {
               >
                 Anti-slop scoring
               </p>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-base text-gray-600">
                 Every piece rated. Zero generic filler.
               </p>
             </div>
@@ -452,7 +477,7 @@ export default function StickerPackPage() {
               >
                 Indian D2C voice
               </p>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-base text-gray-600">
                 Trained on brands your audience already loves.
               </p>
             </div>
@@ -464,7 +489,7 @@ export default function StickerPackPage() {
               >
                 One brief &rarr; 30 days
               </p>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-base text-gray-600">
                 Paste once. Get a full month of content.
               </p>
             </div>
@@ -476,7 +501,7 @@ export default function StickerPackPage() {
               >
                 Not a ChatGPT wrapper
               </p>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-base text-gray-600">
                 Custom models. Custom scoring. Custom voice.
               </p>
             </div>
@@ -539,7 +564,7 @@ export default function StickerPackPage() {
               >
                 We&apos;re on it!
               </h3>
-              <p className="text-gray-600">
+              <p className="text-base md:text-lg text-gray-600">
                 Generating content for{" "}
                 <span className="font-bold text-[#8b5cf6]">
                   {submittedBrand}
@@ -576,7 +601,7 @@ export default function StickerPackPage() {
                     >
                       Fast lane
                     </h3>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-base md:text-lg text-gray-600 mb-6">
                       Paste your brand in. We will figure out the rest.
                     </p>
 
@@ -584,7 +609,7 @@ export default function StickerPackPage() {
                     <div className="mb-5">
                       <label
                         htmlFor="brand_blob"
-                        className="block text-sm font-bold text-gray-700 mb-2"
+                        className="block text-base font-bold text-gray-700 mb-2"
                       >
                         About your brand *
                       </label>
@@ -596,7 +621,7 @@ export default function StickerPackPage() {
                         {...fastRegister("brand_blob")}
                       />
                       {fastErrors.brand_blob && (
-                        <p className="mt-1 text-sm text-[#ff6b6b]">
+                        <p className="mt-1 text-base text-[#ff6b6b]">
                           {fastErrors.brand_blob.message}
                         </p>
                       )}
@@ -607,7 +632,7 @@ export default function StickerPackPage() {
                       <div>
                         <label
                           htmlFor="fast_brand_name"
-                          className="block text-sm font-bold text-gray-700 mb-1"
+                          className="block text-base font-bold text-gray-700 mb-1"
                         >
                           Brand name *
                         </label>
@@ -619,7 +644,7 @@ export default function StickerPackPage() {
                           {...fastRegister("brand_name")}
                         />
                         {fastErrors.brand_name && (
-                          <p className="mt-1 text-sm text-[#ff6b6b]">
+                          <p className="mt-1 text-base text-[#ff6b6b]">
                             {fastErrors.brand_name.message}
                           </p>
                         )}
@@ -627,7 +652,7 @@ export default function StickerPackPage() {
                       <div>
                         <label
                           htmlFor="fast_email"
-                          className="block text-sm font-bold text-gray-700 mb-1"
+                          className="block text-base font-bold text-gray-700 mb-1"
                         >
                           Email *
                         </label>
@@ -639,7 +664,7 @@ export default function StickerPackPage() {
                           {...fastRegister("email")}
                         />
                         {fastErrors.email && (
-                          <p className="mt-1 text-sm text-[#ff6b6b]">
+                          <p className="mt-1 text-base text-[#ff6b6b]">
                             {fastErrors.email.message}
                           </p>
                         )}
@@ -662,8 +687,8 @@ export default function StickerPackPage() {
                   <p className="text-center mt-5">
                     <button
                       type="button"
-                      onClick={() => setMode("full")}
-                      className="text-gray-500 hover:text-[#8b5cf6] transition-colors"
+                      onClick={switchToFull}
+                      className="text-base text-gray-500 hover:text-[#8b5cf6] transition-colors"
                       style={{ fontFamily: "var(--font-handwriting)" }}
                     >
                       Want to walk us through in detail? &rarr;
@@ -679,8 +704,8 @@ export default function StickerPackPage() {
                   <div className="mb-6">
                     <button
                       type="button"
-                      onClick={() => setMode("fast")}
-                      className="text-sm text-gray-500 hover:text-[#8b5cf6] transition-colors"
+                      onClick={switchToFast}
+                      className="text-base text-gray-500 hover:text-[#8b5cf6] transition-colors"
                       style={{ fontFamily: "var(--font-handwriting)" }}
                     >
                       &larr; back to fast lane
@@ -691,13 +716,13 @@ export default function StickerPackPage() {
                   <div className="mb-10">
                     <div className="flex items-center justify-between mb-3">
                       <span
-                        className="text-lg text-[#8b5cf6] -rotate-1"
+                        className="text-xl text-[#8b5cf6] -rotate-1"
                         style={{ fontFamily: "var(--font-handwriting)" }}
                       >
                         Step {step} of 3
                       </span>
                       <span
-                        className="text-sm text-gray-500"
+                        className="text-base text-gray-500"
                         style={{ fontFamily: "var(--font-handwriting)" }}
                       >
                         {step === 1
@@ -741,7 +766,7 @@ export default function StickerPackPage() {
                         <div>
                           <label
                             htmlFor="brand_name"
-                            className="block text-sm font-bold text-gray-700 mb-2"
+                            className="block text-base font-bold text-gray-700 mb-2"
                           >
                             Brand Name *
                           </label>
@@ -753,7 +778,7 @@ export default function StickerPackPage() {
                             {...register("brand_name")}
                           />
                           {errors.brand_name && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.brand_name.message}
                             </p>
                           )}
@@ -763,7 +788,7 @@ export default function StickerPackPage() {
                         <div>
                           <label
                             htmlFor="email"
-                            className="block text-sm font-bold text-gray-700 mb-2"
+                            className="block text-base font-bold text-gray-700 mb-2"
                           >
                             Email *
                           </label>
@@ -775,7 +800,7 @@ export default function StickerPackPage() {
                             {...register("email")}
                           />
                           {errors.email && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.email.message}
                             </p>
                           )}
@@ -783,7 +808,7 @@ export default function StickerPackPage() {
 
                         {/* Industry */}
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-2">
+                          <label className="block text-base font-bold text-gray-700 mb-2">
                             Industry *
                           </label>
                           <Select
@@ -808,7 +833,7 @@ export default function StickerPackPage() {
                             </SelectContent>
                           </Select>
                           {errors.industry && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.industry.message}
                             </p>
                           )}
@@ -816,7 +841,7 @@ export default function StickerPackPage() {
 
                         {/* Number of days */}
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-2">
+                          <label className="block text-base font-bold text-gray-700 mb-2">
                             How many days of content? *
                           </label>
                           <div className="flex flex-wrap gap-3">
@@ -830,7 +855,7 @@ export default function StickerPackPage() {
                                   });
                                   setCustomDays(false);
                                 }}
-                                className={`px-5 py-2 rounded-full font-bold text-sm border-2 transition-all ${
+                                className={`px-5 py-2 rounded-full font-bold text-base border-2 transition-all ${
                                   numDays === d && !customDays
                                     ? "bg-[#8b5cf6] text-white border-[#8b5cf6] shadow-md"
                                     : "bg-white text-gray-700 border-gray-200 hover:border-[#8b5cf6]/50"
@@ -842,7 +867,7 @@ export default function StickerPackPage() {
                             <button
                               type="button"
                               onClick={() => setCustomDays(true)}
-                              className={`px-5 py-2 rounded-full font-bold text-sm border-2 transition-all ${
+                              className={`px-5 py-2 rounded-full font-bold text-base border-2 transition-all ${
                                 customDays
                                   ? "bg-[#8b5cf6] text-white border-[#8b5cf6] shadow-md"
                                   : "bg-white text-gray-700 border-gray-200 hover:border-[#8b5cf6]/50"
@@ -872,7 +897,7 @@ export default function StickerPackPage() {
                             />
                           )}
                           {errors.num_days && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.num_days.message}
                             </p>
                           )}
@@ -903,11 +928,11 @@ export default function StickerPackPage() {
                         <div>
                           <label
                             htmlFor="brand_description"
-                            className="block text-sm font-bold text-gray-700 mb-2"
+                            className="block text-base font-bold text-gray-700 mb-2"
                           >
                             Brand Description *
                           </label>
-                          <p className="text-xs text-gray-500 mb-2">
+                          <p className="text-sm text-gray-500 mb-2">
                             What you make, who it is for, what makes you
                             different.
                           </p>
@@ -919,7 +944,7 @@ export default function StickerPackPage() {
                             {...register("brand_description")}
                           />
                           {errors.brand_description && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.brand_description.message}
                             </p>
                           )}
@@ -927,12 +952,12 @@ export default function StickerPackPage() {
 
                         {/* Tone chips */}
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-2">
+                          <label className="block text-base font-bold text-gray-700 mb-2">
                             Tone *
                           </label>
                           <div className="relative">
                             <span
-                              className="absolute -top-6 right-0 text-base text-[#34d399] rotate-2"
+                              className="absolute -top-6 right-0 text-lg text-[#34d399] rotate-2"
                               style={{ fontFamily: "var(--font-handwriting)" }}
                             >
                               &larr; pick all that sound like you
@@ -944,7 +969,7 @@ export default function StickerPackPage() {
                                 key={t}
                                 type="button"
                                 onClick={() => toggleTone(t)}
-                                className={`px-3 py-1.5 rounded-full text-sm font-semibold border-2 transition-all ${getToneRotation(idx)} hover:rotate-0 ${
+                                className={`px-3 py-1.5 rounded-full text-base font-semibold border-2 transition-all ${getToneRotation(idx)} hover:rotate-0 ${
                                   tone.includes(t)
                                     ? getToneColor(idx) +
                                       " shadow-md scale-105"
@@ -961,7 +986,7 @@ export default function StickerPackPage() {
                                   key={t}
                                   type="button"
                                   onClick={() => toggleTone(t)}
-                                  className={`px-3 py-1.5 rounded-full text-sm font-semibold border-2 transition-all ${getToneColor(idx + TONE_OPTIONS.length)} shadow-md scale-105 ${getToneRotation(idx)}`}
+                                  className={`px-3 py-1.5 rounded-full text-base font-semibold border-2 transition-all ${getToneColor(idx + TONE_OPTIONS.length)} shadow-md scale-105 ${getToneRotation(idx)}`}
                                 >
                                   {t} &times;
                                 </button>
@@ -970,7 +995,7 @@ export default function StickerPackPage() {
                               <button
                                 type="button"
                                 onClick={() => setShowCustomTone(true)}
-                                className="px-3 py-1.5 rounded-full text-sm font-semibold border-2 border-dashed border-gray-300 text-gray-400 hover:border-[#8b5cf6] hover:text-[#8b5cf6] transition-colors"
+                                className="px-3 py-1.5 rounded-full text-base font-semibold border-2 border-dashed border-gray-300 text-gray-400 hover:border-[#8b5cf6] hover:text-[#8b5cf6] transition-colors"
                               >
                                 + custom
                               </button>
@@ -979,7 +1004,7 @@ export default function StickerPackPage() {
                                 type="text"
                                 autoFocus
                                 placeholder="type & press enter"
-                                className="px-3 py-1.5 rounded-full text-sm border-2 border-[#8b5cf6] focus:outline-none w-40"
+                                className="px-3 py-1.5 rounded-full text-base border-2 border-[#8b5cf6] focus:outline-none w-40"
                                 value={customToneInput}
                                 onChange={(e) =>
                                   setCustomToneInput(e.target.value)
@@ -1005,7 +1030,7 @@ export default function StickerPackPage() {
                             )}
                           </div>
                           {errors.tone && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.tone.message}
                             </p>
                           )}
@@ -1045,7 +1070,7 @@ export default function StickerPackPage() {
                         <div>
                           <label
                             htmlFor="sample_content"
-                            className="block text-sm font-bold text-gray-700 mb-2"
+                            className="block text-base font-bold text-gray-700 mb-2"
                           >
                             Sample Content *
                           </label>
@@ -1057,7 +1082,7 @@ export default function StickerPackPage() {
                             {...register("sample_content")}
                           />
                           {errors.sample_content && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.sample_content.message}
                             </p>
                           )}
@@ -1067,7 +1092,7 @@ export default function StickerPackPage() {
                         <div>
                           <label
                             htmlFor="content_brief"
-                            className="block text-sm font-bold text-gray-700 mb-2"
+                            className="block text-base font-bold text-gray-700 mb-2"
                           >
                             Content Brief{" "}
                             <span className="text-gray-400 font-normal">
@@ -1085,7 +1110,7 @@ export default function StickerPackPage() {
 
                         {/* Platforms */}
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-3">
+                          <label className="block text-base font-bold text-gray-700 mb-3">
                             Platforms *
                           </label>
                           <div className="flex flex-wrap gap-3">
@@ -1110,7 +1135,7 @@ export default function StickerPackPage() {
                                   key={p}
                                   type="button"
                                   onClick={() => togglePlatform(p)}
-                                  className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm border-2 transition-all ${rotations[idx]} hover:rotate-0 ${
+                                  className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-base border-2 transition-all ${rotations[idx]} hover:rotate-0 ${
                                     isChecked
                                       ? `${colors[idx]} text-white shadow-md`
                                       : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
@@ -1131,7 +1156,7 @@ export default function StickerPackPage() {
                             })}
                           </div>
                           {errors.platforms && (
-                            <p className="mt-1 text-sm text-[#ff6b6b]">
+                            <p className="mt-1 text-base text-[#ff6b6b]">
                               {errors.platforms.message}
                             </p>
                           )}
@@ -1139,7 +1164,7 @@ export default function StickerPackPage() {
 
                         {/* File upload */}
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-2">
+                          <label className="block text-base font-bold text-gray-700 mb-2">
                             Brand Images{" "}
                             <span className="text-gray-400 font-normal">
                               (optional, max 5)
@@ -1175,13 +1200,13 @@ export default function StickerPackPage() {
                               className="hidden"
                               onChange={(e) => handleFiles(e.target.files)}
                             />
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-gray-500 text-base">
                               Drop images here or{" "}
                               <span className="text-[#8b5cf6] font-semibold">
                                 click to browse
                               </span>
                             </p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-sm text-gray-400 mt-1">
                               PNG, JPG, or WebP
                             </p>
                           </div>
@@ -1192,13 +1217,13 @@ export default function StickerPackPage() {
                                   key={idx}
                                   className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2"
                                 >
-                                  <span className="text-sm text-gray-700 truncate max-w-[80%]">
+                                  <span className="text-base text-gray-700 truncate max-w-[80%]">
                                     {f.name}
                                   </span>
                                   <button
                                     type="button"
                                     onClick={() => removeFile(idx)}
-                                    className="text-[#ff6b6b] font-bold text-sm hover:text-red-700"
+                                    className="text-[#ff6b6b] font-bold text-base hover:text-red-700"
                                   >
                                     &times;
                                   </button>
@@ -1248,12 +1273,12 @@ export default function StickerPackPage() {
             LOGO
           </p>
           <span
-            className="inline-block text-lg text-[#8b5cf6] -rotate-2 mb-4"
+            className="inline-block text-xl text-[#8b5cf6] -rotate-2 mb-4"
             style={{ fontFamily: "var(--font-handwriting)" }}
           >
             content that slaps
           </span>
-          <p className="text-sm text-gray-500">
+          <p className="text-base text-gray-500">
             &copy; {new Date().getFullYear()} LOGO. All rights reserved.
           </p>
         </div>
