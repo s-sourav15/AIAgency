@@ -25,9 +25,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LOGO — On-brand content for D2C brands",
+  title: "Your voice. A month of content. Minus the AI smell.",
   description:
-    "Give us your brand. Get a months worth of on-brand social media content.",
+    "Paste in your brand. Get posts, captions, ads that actually sound like you. Not like ChatGPT. Built for Indian D2C brands.",
 };
 
 export default function RootLayout({
