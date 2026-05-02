@@ -52,6 +52,18 @@ async def run_pipeline(
         await _update_status(session_factory, job_id, "completed")
         logger.info(f"Job {job_id} completed successfully")
 
+        # Step 5: auto-deliver (ZIP and/or Drive) based on settings.
+        # Failures here don't fail the job — content is still valid
+        # and the client can always call the export endpoints manually.
+        try:
+            await _auto_deliver(job_id, session_factory, settings)
+        except Exception as e:
+            logger.error(
+                f"Job {job_id}: auto-delivery failed ({e}); "
+                "content is fine, client can export manually.",
+                exc_info=True,
+            )
+
     except Exception as e:
         logger.exception(f"Job {job_id} failed: {e}")
         async with session_factory() as db:
@@ -284,3 +296,73 @@ async def _update_status(
             if status == "completed":
                 job.completed_at = datetime.now(timezone.utc)
             await db.commit()
+
+
+async def _auto_deliver(
+    job_id: UUID,
+    session_factory: async_sessionmaker,
+    settings: Settings,
+):
+    """Dispatch the configured delivery modes after a successful run.
+
+    ``settings.delivery_mode`` controls behavior:
+      * ``zip``   — build a local ZIP (always works; no creds)
+      * ``drive`` — upload a Drive folder (requires google creds)
+      * ``both``  — do both; stamp the job with the Drive link
+                    (frontend prefers Drive when present)
+
+    If Drive is requested but unconfigured, we log a warning and fall
+    back to ZIP so the client still gets *something*.
+    """
+    mode = (settings.delivery_mode or "zip").strip().lower()
+    if mode not in {"zip", "drive", "both"}:
+        logger.warning(
+            "Unknown delivery_mode=%r for job %s; defaulting to zip.",
+            mode, job_id,
+        )
+        mode = "zip"
+
+    wants_drive = mode in {"drive", "both"}
+    wants_zip = mode in {"zip", "both"}
+
+    # Validate Drive config up front. Fall back silently to ZIP-only
+    # if creds are missing — a running demo is better than a 500.
+    if wants_drive and not settings.google_credentials_path:
+        logger.warning(
+            "Job %s: delivery_mode=%s but google_credentials_path is unset; "
+            "falling back to zip-only delivery.",
+            job_id, mode,
+        )
+        wants_drive = False
+        wants_zip = True
+
+    # ZIP first — cheap, local, stamps delivery_url with the path.
+    if wants_zip:
+        from app.services.export_service import build_zip_archive
+        async with session_factory() as db:
+            try:
+                zip_path, piece_count = await build_zip_archive(db, job_id)
+                logger.info(
+                    "Job %s: built ZIP (%d pieces) at %s",
+                    job_id, piece_count, zip_path,
+                )
+            except Exception as e:
+                logger.error("Job %s: ZIP build failed: %s", job_id, e, exc_info=True)
+
+    # Drive second — if successful it overwrites delivery_type+url so
+    # the frontend shows the richer "Open in Drive" experience.
+    if wants_drive:
+        from app.services.drive_delivery_service import deliver_to_drive
+        async with session_factory() as db:
+            try:
+                await deliver_to_drive(
+                    db,
+                    job_id,
+                    credentials_path=settings.google_credentials_path,
+                    root_folder_id=settings.google_drive_root_folder_id or None,
+                )
+            except Exception as e:
+                logger.error(
+                    "Job %s: Drive delivery failed: %s (ZIP remains as fallback)",
+                    job_id, e, exc_info=True,
+                )

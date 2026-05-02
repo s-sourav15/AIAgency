@@ -74,6 +74,14 @@ class Settings(BaseSettings):
     min_quality_score: float = 0.8
     max_concurrent_llm_calls: int = 5
 
+    # Delivery — how completed jobs are packaged for the client.
+    # - "zip":   build a local ZIP (default, works everywhere, no creds)
+    # - "drive": upload a folder to Google Drive and share the link
+    # - "both":  do both; frontend prefers the Drive link when present
+    # When set to "drive" or "both" and google_credentials_path is blank,
+    # the pipeline logs a warning and falls back to "zip" silently.
+    delivery_mode: str = "zip"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
