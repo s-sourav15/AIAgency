@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -82,6 +83,7 @@ const partialSchema = z.object({
 type FormData = z.infer<typeof fullSchema>;
 
 export default function StickerPackPage() {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [submittedBrand, setSubmittedBrand] = useState("");
   const [customToneInput, setCustomToneInput] = useState("");
@@ -182,12 +184,53 @@ export default function StickerPackPage() {
       platforms: data.platforms,
       brand_illustrations_count: data.brand_illustrations?.length || 0,
     };
-    console.log("Submission payload:", payload);
-    // TODO: replace with real POST to ${NEXT_PUBLIC_API_URL}/api/intake once backend HTTPS is live
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setSubmittedBrand(data.brand_name || "your brand");
-    setSubmitted(true);
-    setValidationBanner("");
+
+    const apiUrl =
+      process.env.NEXT_PUBLIC_API_URL || "https://api.utsuk.studio";
+
+    try {
+      const res = await fetch(`${apiUrl}/api/intake`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        // Pydantic 422 payload: { detail: [{ loc, msg, ... }, ...] }
+        let message = `Intake failed (${res.status}).`;
+        try {
+          const body = await res.json();
+          if (Array.isArray(body?.detail)) {
+            message = body.detail
+              .map((d: { msg?: string; loc?: unknown }) => d.msg || "Invalid field")
+              .join(" — ");
+          } else if (typeof body?.detail === "string") {
+            message = body.detail;
+          }
+        } catch {
+          // fall through with generic message
+        }
+        setValidationBanner(message);
+        return;
+      }
+
+      const body: { job_id: string; brand_id: string; redirect_to: string } =
+        await res.json();
+
+      setSubmittedBrand(data.brand_name || "your brand");
+      setSubmitted(true);
+      setValidationBanner("");
+
+      // Give the success card a beat, then jump to the job status page.
+      setTimeout(() => {
+        router.push(body.redirect_to || `/dashboard/jobs/${body.job_id}`);
+      }, 1200);
+    } catch (err) {
+      console.error("Intake submit failed", err);
+      setValidationBanner(
+        "We could not reach the generator. Check your connection and try again."
+      );
+    }
   };
 
   const onFullSubmit = async (data: FormData) => {

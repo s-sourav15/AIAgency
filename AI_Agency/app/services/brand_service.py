@@ -20,6 +20,7 @@ async def create_brand(db: AsyncSession, data: BrandCreate) -> Brand:
         industry=data.industry,
         sample_content=data.sample_content,
         description=data.description,
+        email=data.email,
     )
     db.add(brand)
     await db.flush()
