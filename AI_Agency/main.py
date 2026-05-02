@@ -7,7 +7,7 @@ from sqlalchemy import text
 from app.config import Settings
 from app import database
 from app.models import Base
-from app.routes import brands, generation, content, export
+from app.routes import brands, generation, content, export, intake
 
 
 @asynccontextmanager
@@ -68,6 +68,7 @@ app.include_router(brands.router, prefix="/api", tags=["brands"])
 app.include_router(generation.router, prefix="/api", tags=["generation"])
 app.include_router(content.router, prefix="/api", tags=["content"])
 app.include_router(export.router, prefix="/api", tags=["export"])
+app.include_router(intake.router, prefix="/api", tags=["intake"])
 
 
 @app.get("/health")

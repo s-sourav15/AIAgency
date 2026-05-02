@@ -12,6 +12,7 @@ class BrandCreate(BaseModel):
     industry: str | None = None
     sample_content: list[str] = []
     description: str | None = None
+    email: str | None = None
 
 
 class BrandResponse(BaseModel):
@@ -22,6 +23,7 @@ class BrandResponse(BaseModel):
     fonts: list
     tone: str | None
     industry: str | None
+    email: str | None = None
     voice_profile: dict | None
     visual_style: dict | None = None
     sample_content: list

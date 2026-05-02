@@ -16,6 +16,7 @@ class Brand(Base):
     fonts = Column(JSON, default=list)
     tone = Column(String(100), nullable=True)
     industry = Column(String(100), nullable=True)
+    email = Column(String(320), nullable=True)
     voice_profile = Column(JSON, nullable=True)
     visual_style = Column(JSON, nullable=True)
     sample_content = Column(JSON, default=list)
